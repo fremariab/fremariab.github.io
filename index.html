@@ -1,0 +1,2749 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freda-Marie Beecham's Portfolio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap");
+
+      :root {
+        --ink: #1f2430;
+        --ink-dim: #5b6475;
+        --surface: #ffffff;
+        --surface-2: #fafafc;
+        --accent-100: #f4f1ff;
+        --accent-200: #ebe6ff;
+        --border: #e7e7f0;
+        --shadow: 0 8px 24px rgba(22, 24, 35, 0.06),
+          0 2px 6px rgba(22, 24, 35, 0.04);
+
+        --desktop-max: 1600px;
+        --desktop-vw: 92vw;
+
+        --pattern-dot: rgba(75, 1, 94, 0.22);
+        --pattern-size: 16px;
+        --pattern-radius: 1.2px;
+
+        --accent: #4b015e;
+        --accent-soft: #f6eff8;
+        --ring: 0 0 0 3px rgba(75, 1, 94, 0.16);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Courier Prime", monospace;
+        color: var(--ink);
+        min-height: 100vh;
+        padding: 24px;
+
+        background: radial-gradient(
+              circle at 1px 1px,
+              var(--pattern-dot) var(--pattern-radius),
+              transparent var(--pattern-radius)
+            )
+            0 0 / var(--pattern-size) var(--pattern-size),
+          linear-gradient(#e6d7ff, #e6d7ff);
+      }
+
+      .desktop {
+        max-width: clamp(1100px, var(--desktop-vw), var(--desktop-max));
+        margin: 0 auto;
+        min-height: calc(100vh - 48px);
+      }
+
+      .window {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin: 20px 0;
+      }
+
+      .title-bar {
+        background: #4b015e;
+        color: #fff;
+        padding: 10px 14px;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .window-controls {
+        display: flex;
+        gap: 6px;
+      }
+      .control-btn {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--ink);
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease,
+          transform 0.05s ease;
+      }
+      .control-btn:hover {
+        background: var(--accent-100);
+      }
+      .control-btn:active {
+        transform: translateY(1px);
+      }
+
+      .main-window {
+        min-height: 88vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .toolbar {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .nav-btn {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--ink);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        border-radius: 6px;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .nav-btn:hover {
+        background: var(--accent-100);
+      }
+      .nav-btn:active {
+        background: var(--accent-200);
+      }
+      .nav-btn:disabled {
+        color: #b9bdc8;
+        cursor: not-allowed;
+        background: #f5f6fb;
+        border-color: #ececf4;
+      }
+
+      .address-bar {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--ink);
+        font-family: inherit;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+      .address-bar:focus {
+        outline: 2px solid #dcd4ff;
+        outline-offset: 1px;
+      }
+
+      .content-area {
+        flex: 1;
+        background: var(--surface);
+        padding: 28px;
+      }
+      .intro-hero {
+        margin: 0 auto 22px;
+        padding: 6px 2px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink);
+        text-align: center;
+        max-width: 600px;
+        grid-column: 1 / -1;
+      }
+      .folder-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 24px;
+        padding: 20px 0;
+      }
+
+      .folder-item,
+      .file-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 10px;
+        transition: background 0.15s ease, box-shadow 0.15s ease;
+      }
+      .folder-item:hover,
+      .file-item:hover {
+        background: #e6d7ff;
+        box-shadow: inset 0 0 0 1px #e6d7ff;
+        transform: translateY(-1px);
+      }
+
+      .folder-icon,
+      .file-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 10px;
+        display: block;
+        background-color: var(--accent);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        transition: transform 0.12s ease, filter 0.12s ease;
+        mask-position: center;
+
+        -webkit-mask-composite: source-over;
+        mask-composite: add;
+      }
+
+      .folder-icon {
+        background-color: #4b015e;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,\<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">\<path fill="black" d="M40,12H22l-4-4H8c-2.2,0-4,1.8-4,4v24c0,2.2,1.8,4,4,4h32c2.2,0,4-1.8,4-4V16C44,13.8,42.2,12,40,12z"/>\</svg>');
+        mask-image: url('data:image/svg+xml;utf8,\<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">\<path fill="black" d="M40,12H22l-4-4H8c-2.2,0-4,1.8-4,4v24c0,2.2,1.8,4,4,4h32c2.2,0,4-1.8,4-4V16C44,13.8,42.2,12,40,12z"/>\</svg>');
+      }
+
+      .file-icon {
+        background-color: #4b015e;
+        -webkit-mask-image: url('data:image/svg+xml;utf8,\<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">\<path fill="black" d="M8 3h22l10 10v30H8z"/>\</svg>');
+        mask-image: url('data:image/svg+xml;utf8,\<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">\<path fill="black" d="M8 3h22l10 10v30H8z"/>\</svg>');
+      }
+
+      .folder-name,
+      .file-name {
+        font-size: 12px;
+        text-align: center;
+        max-width: 120px;
+        word-wrap: break-word;
+        color: var(--ink);
+      }
+
+      .breadcrumb {
+        color: #4b015e;
+        font-size: 12px;
+        margin-bottom: 20px;
+      }
+      .breadcrumb a {
+        color: #4b015e;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .file-content {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin: 20px 0;
+        white-space: pre-wrap;
+        color: var(--ink);
+        border-radius: 10px;
+      }
+
+      .project-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .project-title {
+        color: var(--ink);
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+      .project-description {
+        margin-bottom: 12px;
+        line-height: 1.45;
+        color: var(--ink);
+      }
+      .project-tech {
+        color: var(--ink-dim);
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+
+      .github-link,
+      .demo-btn {
+        display: inline-block;
+        background: #4b015e;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: filter 0.15s ease, transform 0.05s ease;
+        line-height: 1;
+        vertical-align: middle;
+      }
+
+      .demo-btn {
+        appearance: none;
+        border: 0;
+        font-family: inherit;
+        cursor: pointer;
+        background: #4b015e;
+        color: #fff;
+      }
+
+      .github-link:hover,
+      .demo-btn:hover {
+        filter: brightness(1.05);
+      }
+
+      .github-link:active,
+      .demo-btn:active {
+        transform: translateY(1px);
+      }
+
+      .github-link:focus-visible,
+      .demo-btn:focus-visible {
+        outline: 2px solid #dcd4ff;
+        outline-offset: 2px;
+      }
+
+      .skill-category {
+        margin-bottom: 20px;
+      }
+      .skill-category h3 {
+        color: var(--accent);
+        margin-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 6px;
+      }
+      .skill-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .skill-tag {
+        background: var(--accent-100);
+        border: 1px solid var(--accent-200);
+        color: var(--ink);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+      }
+
+      .status-bar {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        color: #4b015e;
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+
+      .folder-item:focus,
+      .file-item:focus {
+        outline: 2px solid #dcd4ff;
+        outline-offset: 3px;
+        background: var(--accent-100);
+      }
+
+      #contactView[hidden] {
+        display: none;
+      }
+
+      .contact-card {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 20px 22px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+        text-align: left;
+      }
+
+      .contact-title {
+        margin: 0 0 6px;
+        font-size: 16px;
+        line-height: 1.35;
+        color: var(--ink);
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+
+      .contact-intro {
+        margin: 0 0 14px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink-dim);
+      }
+
+      .contact-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 0;
+        margin: 0;
+      }
+
+      .contact-list li {
+        list-style: none;
+      }
+
+      .contact-item {
+        display: grid;
+        grid-template-columns: 22px 1fr;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        text-decoration: none;
+        color: var(--ink);
+        background: #fff;
+        transition: background 0.15s ease, border-color 0.15s ease,
+          transform 0.05s ease;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.3;
+      }
+
+      .contact-item:hover {
+        background: var(--accent-soft);
+        border-color: #dbc2e6;
+      }
+
+      .contact-item:active {
+        transform: translateY(1px);
+      }
+
+      .contact-item:focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+      }
+
+      .contact-icon {
+        display: inline-flex;
+        width: 18px;
+        height: 18px;
+        color: var(--accent);
+      }
+
+      .contact-label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      @media (max-width: 360px) {
+        .contact-item {
+          padding: 8px 10px;
+        }
+      }
+      .icon {
+        flex-shrink: 0;
+      }
+
+      #demoDialog {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0;
+        width: min(900px, 92vw);
+        box-shadow: var(--shadow);
+        background: var(--surface);
+      }
+      #demoDialog[open] {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        width: min(900px, 92vw);
+        max-height: 90vh;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        background: var(--surface);
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      #demoDialog::backdrop {
+        background: rgba(0, 0, 0, 0.35);
+      }
+
+      .demo-shell {
+        margin: 0;
+      }
+      .demo-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(180deg, var(--accent-100), #efeaff);
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .demo-close {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--ink);
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      .demo-close:hover {
+        background: var(--accent-100);
+      }
+
+      .demo-container {
+        padding: 12px 14px 16px;
+        overflow: hidden;
+      }
+      .demo-container > * {
+        width: 100%;
+        height: clamp(220px, 56vh, 70vh);
+        border: 0;
+        border-radius: 10px;
+        background: #000;
+      }
+
+      html.modal-open,
+      body.modal-open {
+        overflow: hidden;
+      }
+      .about-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: flex-start;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .about-photo img {
+        width: 180px;
+        height: 375px;
+        object-fit: cover;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .about-text {
+        flex: 1;
+        min-width: 250px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--ink);
+      }
+
+      .about-text h2 {
+        margin-bottom: 10px;
+        color: #4b015e;
+      }
+
+      .about-text h3 {
+        margin-top: 20px;
+        margin-bottom: 8px;
+        color: #4b015e;
+      }
+
+      .about-edu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .about-edu li {
+        margin-bottom: 6px;
+      }
+
+      #essayDialog[open] {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        width: min(900px, 92vw);
+        max-height: 90vh;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        background: var(--surface);
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      #essayContainer {
+        padding: 16px !important;
+        overflow-y: auto !important;
+      }
+
+      #essayContainer > * {
+        height: auto !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+      }
+
+      #essayContainer h2 {
+        margin: 0 0 10px;
+        color: #4b015e;
+        font-size: 18px;
+      }
+
+      #essayContainer p {
+        margin: 10px 0;
+        line-height: 1.6;
+        font-size: 13px;
+      }
+
+      #essayContainer em,
+      #essayContainer strong {
+        font-weight: 700;
+      }
+
+      @media (min-width: 1400px) {
+        body {
+          padding: 28px;
+        }
+        .project-card {
+          margin: 18px 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .folder-icon,
+        .file-icon,
+        .folder-item,
+        .file-item {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="desktop">
+      <div class="window main-window">
+        <div class="title-bar">
+          <span id="windowTitle"
+            >C:\Freda-Marie Beecham\Portfolio\ - File Explorer</span
+          >
+          <div class="window-controls">
+            <div class="control-btn">_</div>
+            <div class="control-btn">□</div>
+            <div class="control-btn">×</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button
+            class="nav-btn"
+            id="backBtn"
+            onclick="navigateBack()"
+            disabled
+          >
+            ← Back
+          </button>
+          <button
+            class="nav-btn"
+            id="forwardBtn"
+            onclick="navigateForward()"
+            disabled
+          >
+            Forward →
+          </button>
+          <input
+            type="text"
+            class="address-bar"
+            id="addressBar"
+            value="C:\Freda-Marie Beecham\Portfolio\"
+            readonly
+          />
+        </div>
+
+        <div class="content-area" id="contentArea">
+          <div class="breadcrumb" id="breadcrumb">
+            <a onclick="navigateTo('home')">Portfolio</a>
+          </div>
+
+          <div id="homeView" class="folder-grid">
+            <div id="homeIntro" class="intro-hero">
+              Hi there! I’m Freda-Marie. This is my portfolio, designed like a
+              file system because organizing and exploring is how I think best,
+              and I hope you’ll enjoy discovering more about me the same way :)
+            </div>
+            <div class="folder-item" onclick="navigateTo('about')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">About Me</div>
+            </div>
+
+            <div class="folder-item" onclick="navigateTo('work')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Work Experience</div>
+            </div>
+
+            <div class="folder-item" onclick="navigateTo('projects')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Projects</div>
+            </div>
+
+            <div class="folder-item" onclick="navigateTo('skills')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Skills</div>
+            </div>
+            <!-- NEW: Volunteering folder -->
+            <div class="folder-item" onclick="navigateTo('volunteer')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Volunteering</div>
+            </div>
+
+            <div class="folder-item" onclick="navigateTo('writing')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Miscellaneous</div>
+            </div>
+
+            <div class="file-item" onclick="openFile('resume')">
+              <div class="file-icon"></div>
+              <div class="file-name">Resume.pdf</div>
+            </div>
+
+            <div class="folder-item" onclick="navigateTo('contact')">
+              <div class="file-icon"></div>
+              <div class="folder-name">Contact.txt</div>
+            </div>
+          </div>
+
+          <div id="aboutView" style="display: none">
+            <div class="about-container">
+              <div class="about-photo">
+                <img src="https://github.com/fremariab/portfolio/releases/download/v1.0.0/pp1.jpg" alt="Freda-Marie Beecham portrait" />
+              </div>
+
+              <div class="about-text">
+                <h2>About Me</h2>
+                <p>
+                  I’ve always been fascinated by how technology connects
+                  everything around us. For me, IoT is where data, web
+                  technologies, and AI come together to shape the future — from
+                  smart cities to safer transportation. I’m especially
+                  interested in transportation safety, where real-time data and
+                  automation can save lives.
+                </p>
+                <br />
+                <p>
+                  Beyond tech, I care deeply about representation in STEM. With
+                  women still underrepresented in many fields, I’m passionate
+                  about mentoring, engaging in initiatives, and one day building
+                  my own program to support and inspire young women in tech.
+                </p>
+                <br />
+                <p>
+                  At my core, I’m curious, innovative, and impact-driven. For
+                  me, technology isn’t just lines of code — it’s a tool to solve
+                  real problems and improve lives.
+                </p>
+
+                <h3>Education</h3>
+                <ul class="about-edu">
+                  <li>
+                    <strong>Ashesi University</strong> (2022 – 2025) · BSc.
+                    Computer Science · Magna Cum Laude
+                  </li>
+                  <li>
+                    <strong>SOS-Hermann Gmeiner International College</strong>
+                    (2019 – 2021) · International Baccalaureate Diploma
+                  </li>
+                  <li>
+                    <strong>Faith Montessori School</strong> (2017 – 2019) ·
+                    Cambridge IGCSE
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="skillsView" style="display: none">
+            <div class="skill-category">
+              <h3>Programming Languages</h3>
+              <div class="skill-list">
+                <span class="skill-tag">C++</span>
+                <span class="skill-tag">CSS</span>
+                <span class="skill-tag">HTML</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Kotlin</span>
+                <span class="skill-tag">PHP</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">R</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Frameworks, Libraries & Tools</h3>
+              <div class="skill-list">
+                <span class="skill-tag">React.js</span>
+                <span class="skill-tag">Next.js</span>
+                <span class="skill-tag">Flutter</span>
+                <span class="skill-tag">Django REST Framework</span>
+                <span class="skill-tag">TensorFlow</span>
+                <span class="skill-tag">Firebase</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Express</span>
+                <span class="skill-tag">Android Studio</span>
+                <span class="skill-tag">Postman API</span>
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Scrum</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Data</h3>
+              <div class="skill-list">
+                <span class="skill-tag">Tableau</span>
+                <span class="skill-tag">Pandas</span>
+                <span class="skill-tag">Data Analytics</span>
+                <span class="skill-tag">Data Visualization</span>
+                <span class="skill-tag">Microsoft Excel</span>
+                <span class="skill-tag">Microsoft Access</span>
+                <span class="skill-tag">Microsoft PowerPoint</span>
+                <span class="skill-tag">Microsoft Word</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Design & Media</h3>
+              <div class="skill-list">
+                <span class="skill-tag">Adobe Premiere Pro</span>
+                <span class="skill-tag">Adobe Photoshop</span>
+                <span class="skill-tag">Adobe Illustrator</span>
+                <span class="skill-tag">Canva</span>
+                <span class="skill-tag">Squarespace</span>
+                <span class="skill-tag">Wix</span>
+                <span class="skill-tag">WordPress</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Languages</h3>
+              <div class="skill-list">
+                <span class="skill-tag">English</span>
+                <span class="skill-tag">Fante</span>
+                <span class="skill-tag">Twi</span>
+                <span class="skill-tag">French</span>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3>Professional & Soft Skills</h3>
+              <div class="skill-list">
+                <span class="skill-tag">Software Engineering Practices</span>
+                <span class="skill-tag">Leadership</span>
+                <span class="skill-tag">Teamwork</span>
+                <span class="skill-tag">Problem Solving</span>
+                <span class="skill-tag">Conflict Resolution</span>
+                <span class="skill-tag">Decision-Making</span>
+                <span class="skill-tag">Event Planning</span>
+                <span class="skill-tag">Resource Allocation</span>
+                <span class="skill-tag">Time Management</span>
+                <span class="skill-tag">Public Speaking</span>
+                <span class="skill-tag">Strategic Planning</span>
+                <span class="skill-tag">Community Building</span>
+                <span class="skill-tag">Peer Tutoring</span>
+              </div>
+            </div>
+          </div>
+
+          <section id="contactView" hidden>
+            <div class="contact-card">
+              <h2 class="contact-title">Let’s connect</h2>
+              <p class="contact-intro">
+                I’m always happy to chat about roles, collaborations, or
+                anything cool in the tech space!
+              </p>
+
+              <ul class="contact-list" role="list">
+                <li>
+                  <a
+                    class="contact-item"
+                    href="mailto:fredamariabeech@gmail.com"
+                    aria-label="Email Freda-Marie"
+                  >
+                    <span class="contact-icon" aria-hidden="true">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 
+                2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 3.25-8 5-8-5V6l8 
+                5 8-5v1.25Z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="contact-label">fredamariabeech@gmail.com</span>
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    class="contact-item"
+                    href="https://www.linkedin.com/in/freda-marie-beecham/"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="LinkedIn profile"
+                  >
+                    <span class="contact-icon" aria-hidden="true">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0ZM0 8h5v15H0V8Zm7.5 0h4.7v2.1h.1c.7-1.3 2.4-2.7 4.9-2.7 5.3 0 6.3 3.5 6.3 8v9.6h-5V15c0-2.4-.1-5.4-3.3-5.4-3.3 0-3.8 2.6-3.8 5.2v8.2h-5V8Z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="contact-label"
+                      >linkedin.com/in/freda-marie-beecham</span
+                    >
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    class="contact-item"
+                    href="https://github.com/fremariab"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="GitHub profile"
+                  >
+                    <span class="contact-icon" aria-hidden="true">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width="18"
+                        height="18"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.5-3.9-1.5-.6-1.6-1.4-2-1.4-2-1.1-.8.1-.8.1-.8 1.2.1 1.8 1.2 1.8 1.2 1.1 1.9 3 1.3 3.7 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.9 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.6 11.6 0 0 1 6 0s1 .3 1 .3c.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.6-2.7 5.6-5.3 5.9.4.4.7 1 .7 2v3c0 .3.2.7.8.6C20.2 21.4 23.5 17.1 23.5 12 23.5 5.7 18.3.5 12 .5Z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="contact-label">github.com/fremariab</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <div id="projectsView" style="display: none">
+            <div class="project-card">
+              <div class="project-title">
+                Guardian — Ride-Hailing Safety App
+              </div>
+              <div class="project-description">
+                A safety companion for women using ride-hailing in Ghana. It
+                quietly watches for risk (unusual route changes, distressed
+                audio, or fearful facial expressions) and can alert trusted
+                contacts even with limited internet.
+              </div>
+              <div class="project-tech">
+                Technologies: Kotlin (Android), TensorFlow Lite, GPS/Geofencing,
+                Google Maps SDK
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/guardian"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/guardian-demo.mp4"
+                  data-title="Guardian — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Ride Safety & Driver Review Platform
+              </div>
+              <div class="project-description">
+                A web app that lets passengers report incidents, rate drivers,
+                and see community feedback before they ride—promoting
+                accountability and safer trips.
+              </div>
+              <div class="project-tech">
+                Technologies: PHP, MySQL, PhpMyAdmin, HTML/CSS/JS
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/sayf"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/review-demo.mp4"
+                  data-title="Sayf — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Judicial & Electoral Council (JEC) Management System
+              </div>
+              <div class="project-description">
+                A web platform that streamlines university elections—attendance,
+                scheduling, and voting— to improve efficiency, transparency, and
+                participation.
+              </div>
+              <div class="project-tech">
+                Technologies: React.js, Next.js, Firebase
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/ashesi-jec"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <a
+                  href="https://ashesi-jec.vercel.app/"
+                  class="demo-btn"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  View Demo
+                </a>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Emotion Recognition in Ghanaian Dialects
+              </div>
+              <div class="project-description">
+                A deep-learning model that recognizes emotions in local
+                dialects, making speech-driven apps more inclusive and
+                responsive to Ghanaian users.
+              </div>
+              <div class="project-tech">
+                Technologies: Python, TensorFlow, Librosa, Pandas
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a href="#" class="github-link" target="_blank" rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/emotion-demo.mp4"
+                  data-title="Emotion Recognition — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                IoT-Based Smart Environment Monitoring & Control
+              </div>
+              <div class="project-description">
+                A sensor network that tracks temperature, humidity, and light in
+                real time and predicts temperature trends to support
+                energy-efficient automation.
+              </div>
+              <div class="project-tech">
+                Technologies: ESP32, Arduino/C++, MQTT, (ML) Forecasting
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap"></div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Footprint Forward — Carbon Footprint Tracker
+              </div>
+              <div class="project-description">
+                A lightweight calculator that estimates emissions from daily
+                transport choices and suggests lower-carbon alternatives to
+                nudge sustainable habits.
+              </div>
+              <div class="project-tech">Technologies: Java, Git</div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/T11-OOP"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/footprint-forward-demo.mp4"
+                  data-title="Footprint Forward — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+            <div class="project-card">
+              <div class="project-title">
+                Sankofa Girls in Science — Website
+              </div>
+              <div class="project-description">
+                A fast, accessible site for program information, mentor
+                profiles, event updates, and sign-ups. Designed so non-technical
+                coordinators can update content easily.
+              </div>
+              <div class="project-tech">
+                Technologies: Next.js (React), Tailwind CSS, Vercel/Netlify
+                Forms, Google Analytics
+              </div>
+
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/gis-website"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+
+                <a
+                  href="                https://fremariab.github.io/gis-website/
+"
+                  class="demo-btn"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  View Demo
+                </a>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Locomo — Trotro Prices & Route Finder
+              </div>
+              <div class="project-description">
+                A mobile app concept that helps commuters discover trotro
+                routes, typical prices, and wayfinding hints across town to cut
+                guesswork and travel time.
+              </div>
+              <div class="project-tech">
+                Technologies: Flutter (Dart), Google Maps, REST APIs
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/locomo_app"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">Coocue — Smartphone Baby Monitor</div>
+              <div class="project-description">
+                Turns two spare phones into a budget baby monitor with live
+                audio/video and motion/sound alerts—no dedicated hardware
+                required.
+              </div>
+              <div class="project-tech">
+                Technologies: Android (Kotlin), WebRTC/RTSP, Push Notifications
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/coocue"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/coocue-demo.mp4"
+                  data-title="Coocue — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Computer Organization & Architecture — Logisim Project
+              </div>
+              <div class="project-description">
+                A digital-logic build in Logisim demonstrating core CPU
+                concepts—combinational logic, memory, and basic datapath
+                control—wired into runnable circuits.
+              </div>
+              <div class="project-tech">
+                Technologies: Logisim, Digital logic, CPU datapath
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/group10_finalproject"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">Ashesi Lost & Found</div>
+              <div class="project-description">
+                A campus platform to report, browse, and claim lost items with a
+                simple verification flow—reducing time to reunite owners with
+                their belongings.
+              </div>
+              <div class="project-tech">
+                Technologies: React, Firebase (Auth/Firestore/Storage)
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/ashesilostandfound"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/lostfound-demo.mp4"
+                  data-title="Lost & Found — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">Chore Management System</div>
+              <div class="project-description">
+                A simple web tool to assign chores, set due dates, and track
+                status for homes or teams—so nothing slips through the cracks.
+              </div>
+              <div class="project-tech">
+                Technologies: JavaScript, HTML, CSS (optional: Firebase for
+                sync)
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/chore-mgt"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+              </div>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">Customer Churn Prediction</div>
+              <div class="project-description">
+                A machine-learning model that flags at-risk customers so teams
+                can intervene earlier with targeted retention offers.
+              </div>
+              <div class="project-tech">
+                Technologies: Python, scikit-learn, Pandas, Matplotlib
+              </div>
+              <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                <a
+                  href="https://github.com/fremariab/ChurningCustomersProject"
+                  class="github-link"
+                  target="_blank"
+                  rel="noopener"
+                  >View on GitHub</a
+                >
+                <button
+                  class="demo-btn"
+                  type="button"
+                  data-video="https://github.com/fremariab/portfolio/releases/download/v1.0.0/churn-demo.mp4"
+                  data-title="Churn Prediction — Demo"
+                >
+                  View Demo
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div id="writingView" style="display: none">
+            <div class="project-card">
+              <div class="project-title">
+                Artificial Intelligence : The Truth
+              </div>
+              <div class="project-description">
+                Unpacking the myths around AI...Will it really replace us, or is
+                the story more about how people and machines work together?
+              </div>
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="aiTruth"
+                data-title="Artificial Intelligence : The Truth"
+              >
+                Read full text
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                The Big Fat ‘F’ in Change Management
+              </div>
+              <div class="project-description">
+                A failed Canadian gov project as a cautionary tale; It cost
+                millions and still failed. Here I share lessons on planning,
+                training, and doing things right.
+              </div>
+
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="change"
+                data-title="Change Management"
+                >Read full text</a
+              >
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                The Usefulness of Facial Recognition
+              </div>
+              <div class="project-description">
+                From unlocking phones to tracking protesters, facial
+                recognition’s impact depends on how and where it’s used.
+              </div>
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="facial"
+                data-title="Facial Recognition"
+                >Read full text</a
+              >
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">It’s Only As Real As It Gets…</div>
+              <div class="project-description">
+                Why computer models can’t perfectly mirror reality: complexity,
+                assumptions, shifting conditions.
+              </div>
+
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="models"
+                data-title="It’s Only As Real As It Gets…"
+              >
+                Read full text
+              </a>
+            </div>
+            <div class="project-card">
+              <div class="project-title">
+                A Kind-of Expert Analysis on Expert Systems
+              </div>
+              <div class="project-description">
+                Case study: INVEX. Where expert systems shine—and where
+                reliability/security break down.
+              </div>
+
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="expert"
+                data-title="Expert Systems"
+                >Read full text</a
+              >
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                The Importance of the Systems Development Life Cycle
+              </div>
+              <div class="project-description">
+                Behind every system is a process! The SDLC shows why planning
+                and people matter as much as the final product.
+              </div>
+
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="sdlc"
+                data-title="The Importance of the Systems Development Life Cycle"
+                >Read full text</a
+              >
+            </div>
+            <div class="project-card">
+              <div class="project-title">Multimedia Manipulation</div>
+              <div class="project-description">
+                How digital media shapes what we think is important.
+              </div>
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="multimedia"
+                data-title="Multimedia Manipulation"
+                >Read full text</a
+              >
+            </div>
+            <div class="project-card">
+              <div class="project-title">Finding A Connection</div>
+              <div class="project-description">
+                The internet makes knowledge easy to grab but are we becoming
+                too dependent to question what we read?
+              </div>
+
+              <a
+                href="javascript:void(0)"
+                class="github-link"
+                data-essay="connection"
+                data-title="Finding A Connection"
+                >Read full text</a
+              >
+            </div>
+          </div>
+
+          <!-- NEW VIEW: Volunteering -->
+          <div id="volunteerView" style="display: none">
+            <div class="project-card">
+              <div class="project-title">
+                Peer Academic Advisor — Academic Advising Department, Ashesi
+                University
+              </div>
+              <div class="project-tech">May 2024 – Feb 2025 · 10 mos</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Advised peers on coursework, study strategies, and time
+                  management to help them overcome academic challenges.
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Head of the Course Representative System — Academic Committee,
+                Ashesi University
+              </div>
+              <div class="project-tech">Jan 2024 – Dec 2024 · 1 yr</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Developed an Excel-based system to track course representative
+                  reports and feedback trends.
+                </li>
+                <li>
+                  Led a team of 15 students to gather input from the student
+                  body, supporting course design improvements.
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Programming Peer Tutor — Academic Peer Tutoring Program, Ashesi
+                University
+              </div>
+              <div class="project-tech">Jan 2023 – Dec 2024 · 1 yr 4 mos</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Led 10 sessions on Data Structures and Algorithms, covering
+                  key concepts such as arrays, linked lists,and trees, which
+                  significantly improved students' understanding and application
+                  of these concepts
+                </li>
+                <li>
+                  Aided 30 students in mastering the concepts of inheritance,
+                  polymorphism and encapsulation in Java through targeted
+                  instruction and hands-on practice on a weekly basis
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Career Peer Advisor — Career Services Department, Ashesi
+                University
+              </div>
+              <div class="project-tech">Aug 2023 – Dec 2024 · 1 yr 5 mos</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Organized career development events such as CV reviews and
+                  application workshops.
+                </li>
+                <li>
+                  Planned and coordinated the 2025 Career Fair, overseeing
+                  logistics, volunteers, and event flow.
+                </li>
+              </ul>
+            </div>
+            <div class="project-card">
+              <div class="project-title">
+                General Secretary — Ashesi Basketball Association, Ashesi
+                University
+              </div>
+              <div class="project-tech">Apr 2023 – Apr 2024 · 1 yr 1 mo</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Managed administrative duties including minutes, bookings, and
+                  team reminders.
+                </li>
+                <li>
+                  Assisted with basketball game setup and event coordination for
+                  smooth execution.
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Foundations of Design & Entrepreneurship Coach — Ashesi
+                University
+              </div>
+              <div class="project-tech">Feb 2023 – May 2023 · 4 mos</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Coached students in applying entrepreneurial skills through
+                  practical exercises and mentorship.
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Tutor — St. Nicholas Preparatory School
+              </div>
+              <div class="project-tech">Sep 2019 – Dec 2019 · 4 mos</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Taught Class 3 pupils English, strengthening vocabulary and
+                  spelling proficiency for young learners.
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="workView" style="display: none">
+            <div class="project-card">
+              <div class="project-title">
+                AmaliTech Services GmbH — East Legon
+              </div>
+              <div class="project-tech">
+                Software Developer Intern · Jun 2023 – Aug 2023
+              </div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Implemented PA Authentication functions for a hospital booking
+                  management system as part of a Scrum team using Python and
+                  Django REST Framework (6-week delivery).
+                </li>
+                <li>
+                  Co-designed and developed an Access Key Manager API with
+                  secure key lifecycle features, improving reliability and safe
+                  access management for users.
+                </li>
+              </ul>
+            </div>
+
+            <div class="project-card">
+              <div class="project-title">
+                Seatec Telecom Services Limited — Tema
+              </div>
+              <div class="project-tech">Solutions Design Intern · Aug 2022</div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Evaluated five conferencing products against client-specific
+                  criteria and recommended a secure, user-focused solution.
+                </li>
+                <li>
+                  Edited existing company footage to create endorsement and
+                  advertisement videos, strengthening proposal presentations.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-bar">
+          <span id="statusText">Ready | 5 items</span>
+        </div>
+      </div>
+    </div>
+    <div id="essayContentRepo" style="display: none">
+      <div id="essay-sdlc">
+        <h2>The Importance of the Systems Development Life Cycle</h2>
+        <br />
+        <p>
+          Sir Arthur Conan Doyle once said,
+          <em
+            >“It has long been an axiom of mine that the little things are
+            infinitely the most important”.</em
+          >
+          Indeed the little things in life have the most significance (like my
+          5’5″ self!). This highlights how people focus on the product but not
+          the process. For example, if a new exeat system would’ve been
+          developed in SOS-HGIC, most people would pay particular attention to
+          how the system has improved, rather than how the system came to be.
+          Relating this example to the quote, it is evident that in developing a
+          new system, the most important characteristic of the system, unknown
+          to many, is how it came to be, specifically through the Systems
+          Development Life Cycle (SDLC). The importance of the Systems
+          Development Life Cycle can be evaluated in many areas. In this blog
+          post, I am going to elaborate on some of these areas and relate it to
+          the Systems Development Life Cycle.
+        </p>
+        <br />
+        <p>
+          End-users, individuals who the system was purposefully designed for,
+          play key roles in the planning of new systems. When planning a new
+          system, the project managers must think of the end-users in all the
+          stages of the SDLC. It is essential as the system must meet all the
+          requirements of the end-users and must work to the standards of the
+          end-users. If this does not happen, all the money and resources spent
+          on the new system will be futile and the project would be deemed as a
+          project failure. This then connects to the SDLC, which makes it
+          necessary for those developing the system to always have the end-user
+          in mind. For example, in our proposed solution for the SOS-HGIC Exeat
+          System, the usability and functionality as well as the speed of the
+          approval process, were all taken into consideration with respect to
+          the end-users. Initially, end-users had problems with the system about
+          delays and losses. For instance, user documentation makes sure that
+          the end-users have information on how the system works as well as some
+          other background knowledge. End-users are thought of here since the
+          system may be difficult to use. Another instance is user acceptance
+          testing also known as beta testing. This is done to make sure that
+          there is an ease of use when using the system in real conditions. The
+          importance of the Systems Development Life Cycle is then prominent
+          when evaluating the role of end-users when planning a new system.
+        </p>
+        <br />
+        <p>
+          In addition, the relevant stakeholders play a part in the planning
+          process. A stakeholder is an individual interested in and is affected
+          by the activities of an organisation. The SDLC ensures that
+          stakeholders are informed about the stage the project is in as they
+          invest their funds into the project and are affected by changes. For
+          example if the system doesn’t work in the long run they will be
+          affected. With the use of the SDLC, this can be avoided where the
+          justification of possible solutions takes place. A SWOT analysis is
+          carried out to see if the new system is profitable by making sure that
+          the benefits outweigh the costs.
+        </p>
+        <br />
+        <p>
+          Utilitarianism, doing the greatest good for the greatest number brings
+          out the importance of the Systems Development Life Cycle . When
+          developing a new system, there are many processes involved like
+          getting software for the system and following standardised procedures.
+          For example in the SDLC, quality assurance methods like the Capability
+          Maturity Model Integration ensures that the development team are
+          following standardised practices at all times (Stuart Gray 320).It is
+          essential that teams must follow copyright laws which will in turn
+          benefit the end-users.
+        </p>
+        <br />
+        <p>
+          Nevertheless, as beneficial as the Systems Development Life Cycle is,
+          it has its flaws as it has social and ethical issues connected to it.
+          One issue that arises is the equality of access. The Systems
+          Development Life Cycle suggests that users must employ some methods
+          and use systems, like bug tracking systems and have different types of
+          maintenance but the reality of the situation is that not all people or
+          organizations have access to this.
+        </p>
+        <br />
+        <p>
+          All things considered, the Systems Development Life Cycle is important
+          to a large extent as it avoids project failure and benefits the
+          organisation in the long run.
+        </p>
+      </div>
+
+      <div id="essay-multimedia">
+        <h2>Multimedia Manipulation</h2>
+        <p>
+          Picture this. You’re casually scrolling through Instagram, liking some
+          posts that you come across but you get a bit bored so you start going
+          through people’s stories. You keep tapping through stories and it
+          seems everyone’s story is similar – they all have that one post.
+          You’re immediately interested and want to know more about the post and
+          its significance. I’m positive that this has happened to you quite a
+          number of times. As you can see from the pictured situation,
+          undeniably, IT influences the way we think and determines what we
+          regard as valuable or important to a large extent. In this blog post,
+          I will be justifying this assertion in the context of
+          multimedia/digital media.
+        </p>
+        <br />
+        <p>
+          In order to reveal the influence of IT on the way we think and as well
+          as what we consider to be valuable or important, we must first have an
+          idea of the IT system in question which is multimedia. Multimedia
+          refers to the “the use and integration of media such as text, images
+          and graphic elements, to create digital products that are available
+          online or offline” (International Baccalaureate 2010). Multimedia
+          usually involves audio editing, animations, video editing and photo
+          editing. These branches of multimedia all require the manipulation of
+          alignment, colour management and resolution, and involve cropping,
+          layering, and filtering (Stuart 2011). Multimedia has many areas of
+          impact such as education and home and leisure, in which the primary
+          stakeholders differ respectively.
+        </p>
+        <br />
+        <p>
+          In education, multimedia has to a large extent influenced the way we
+          think as well as determine what we regard as valuable or important. In
+          education multimedia is used to help simplify concepts and topics for
+          particular subjects. For instance, in biology, multimedia is used to
+          explain the process of photosynthesis in a much shorter time as
+          compared to reading. In such a case, it is possible that in the video
+          or picture perhaps, some particular text has been animated to have
+          more emphasis which would be difficult to do in a book. The use of the
+          animation has been used to place emphasis on a particular word
+          indicating that that particular part of the process is important. This
+          clearly shows how IT has influenced what we consider to be important.
+          One social and ethical issue that is raised in this area of impact is
+          people and machines and policies. Students, the primary stakeholders
+          in this case, are now using multimedia to learn as it helps in
+          explanations and in revision. Students now prefer to learn using
+          multimedia as compared to physical textbooks. This suggests that they
+          are now spending more time online which may turn out to have negative
+          effects, as their interaction with IT can result in eyestrain and
+          headaches. As a result, policies must come in to limit the screen time
+          for students when using multimedia in such a light.
+        </p>
+        <br />
+        <p>
+          Moreover, looking at home and leisure, multimedia has to a large
+          extent influenced the way we think as well as determine what we regard
+          as valuable or important. In home and leisure, social media is a great
+          example. Social media is one of the ways in which multimedia is shared
+          frequently. For instance on twitter, many posts are used to share
+          information. Recently, after the Special Anti-Robbery Squad in Nigeria
+          started mistreating civilians, a number of Nigerians used multimedia
+          to share information regarding the attacks. Thousands of twitter users
+          shared the posts to raise awareness and get international attention
+          which proved to be fruitful. The use of social media in such an
+          instance, shows that indeed there is strength in numbers. With
+          thousands of people retweeting “#ENDSARS” posts, many news agencies
+          and individuals, would have been influenced by the opposition to the
+          SARS unit, and would have started thinking in the same way. Not only
+          that but also would have started to see the #ENDSARS protest as
+          something of value and something significant.
+        </p>
+        <br />
+        <p>
+          However, this brings into question how the increasing global dominance
+          of multimedia gives rise to an increasing uniformity of thinking.
+          Using the example stated earlier, the #ENDSARS protests were used to
+          raise awareness. More and more people, through the use of such
+          multimedia, not only got to know about the situation in Nigeria, but
+          also formed an opinion on the whole issue. This likened them to the
+          many Nigerians who used social media to amplify their cry for help. In
+          doing so, they gained more support from people who thought the same
+          way and who had the same beliefs – that the SARS unit should be
+          dissolved. With more people thinking alike and seeing the benefits of
+          the use of multimedia, many people will start to repost such posts and
+          not credit the original creator. This sheds light on one of the most
+          important social and ethical issues in multimedia, namely,
+          intellectual property. This refers to “ideas, discoveries, writings,
+          works of art, software, collections and presentations of data”
+          (International Baccalaureate 2010). In order to ensure that the
+          reposter does not take credit for the original work of the creator,
+          the post will be copyrighted or watermarked to ensure that all credit
+          goes where it is due.
+        </p>
+        <br />
+        <p>
+          Taking all things into consideration, it is evident that IT influences
+          the way we think and determines what we regard as valuable or
+          important to a large extent. By exploring a number of areas of impact,
+          it is clear that multimedia in this case, can influence the way people
+          think as well as show what is deemed as important. This shows how
+          important technological developments in such a field are. One who
+          understands such a statement, can use it to their benefit. For
+          instance, governments use multimedia to campaign. One example is John
+          Mahama using a generic design, a stock photo, for his presidential
+          campaign logo. The multimedia was used to campaign but the editing was
+          so generic it caused an uproar amongst some. This resulted in a number
+          of people sharing the post to many and ultimately, sharing John
+          Mahama’s campaign poster. This all displays our dependence on IT to
+          share ideas and information but to what extent can we keep our
+          independence as we have now seen that IT can influence our way of
+          thinking.
+        </p>
+      </div>
+
+      <div id="essay-connection">
+        <h2>Finding A Connection</h2>
+        <p>
+          How often do you find yourself Googling “synonym for ….”? Frequently?
+          Well for me, I do that every single day when I do my homework. I’m
+          sure we can all testify to how IT systems such as the internet have
+          simplified many things in our everyday lives. From using the internet
+          to write essays, to effectively communicating with others as well as
+          selling products. With a wide range of uses, the issue of humans’ over
+          reliance on the largest network in the world is brought to light.
+        </p>
+        <br />
+        <p>
+          The internet can be described as a “global wide area network that
+          connects computer systems across the world.” This collection of
+          networks allows other users to connect with people globally through
+          the sharing of a variety of information. However, the use of this IT
+          system influences the accessibility of information and the validity of
+          such information.
+        </p>
+        <br />
+        <p>
+          For instance, the internet is used in a number of areas of impact such
+          as education, home and leisure and health. In education, information
+          from Mass Open Online Courses (MOOCs) can be accessed by students
+          globally, provided that they have a device with stable internet
+          connection. For instance in 2019, with 13,500 courses, the modern MOOC
+          movement reached 120 million learners (Shah). In home and leisure, the
+          internet is most commonly used in social networking software
+          applications that allow users to create profiles and share content
+          with other users on the platform. One famous example, Tiktok, has
+          garnered over 5 billion downloads as of December 2020 (Iqbal). For
+          health, information about the symptoms of different illnesses and
+          diseases can be accessed on the internet. For example, according to
+          Google Trends, search interest in the COVID-19 vaccine has reached an
+          all-time high globally as of 11th March 2021 (Google Trends).
+        </p>
+        <br />
+        <p>
+          For these reasons, many internet users strive to have the best devices
+          that allow them to access information more efficiently and rapidly.
+          The movement of 3G users to LTE users is a prime display of humans’
+          over reliance on the internet. The number of LTE users increased from
+          3.9 billion in 2018 to 5.8 billion in 2021 (Statista). This need for
+          faster bandwidth reveals the extent to which users depend on the
+          internet.
+        </p>
+        <br />
+        <p>
+          With an understanding of the uses of the internet and the growing need
+          for faster and reliable access to information on the internet, it is
+          worthy to note that the quality of information found on the internet
+          plays a large role. Undoubtedly, there is some information on the
+          internet that is guaranteed to be reliable. Most internet users are
+          under the impression that information on the internet is more likely
+          to be up-to-date as web pages can be easily edited when new
+          information comes about. This up-to-date information is easily
+          accessible especially with the use of search engines. The introduction
+          of web 2.0 technologies has also influenced the quality of information
+          on the internet as they allow users to share content on the internet.
+          If any ordinary internet user visits web 2.0 technologies such as
+          blogs or wikis like Wikipedia, they are most likely to consider it as
+          reliable due to it being “peer reviewed” in a sense. These factors
+          have made the information available on the internet to be valid and
+          reliable.
+        </p>
+        <br />
+        <p>
+          However, it must be highlighted that the information on the internet
+          is far from perfect. The information on the internet does not go
+          through any checking process and hence there are vast amounts of
+          information that are biased, incorrect and inaccurate. Moreover, if
+          search engines are not used properly, there is the possibility that
+          users may be overloaded with irrelevant information. There is also the
+          issue of accessing information on undesirable websites. For instance,
+          users may connect to websites that are not genuine which could pose a
+          number of security risks. These unresolved issues of credibility and
+          undesirability are often overlooked by internet users.
+        </p>
+        <br />
+        <p>
+          Thus, when looking at the effects of such control, it can be said that
+          humans have over time developed an over reliance on the internet. With
+          easy access to a variety of information from anywhere in the world,
+          internet users will often overlook the negative aspects of information
+          accessed on the internet in an attempt to quickly get the information
+          we need. It is for these reasons that human beings do not necessarily
+          “believe these things to be true” but rather accept this information
+          without questioning the validity and reliability of the information.
+        </p>
+        <br />
+        <p>
+          Taking all things into consideration, IT such as the internet, to some
+          extent influences the accessibility of information and the reasons for
+          blindly accepting this information, not thinking of its reliability or
+          validity. This results in an over reliance on technology as humans are
+          not used to not putting in effort to carry out tasks. This loosely
+          relates to the concept of nomophobia, where users can not live without
+          technology. In that regard, all internet users must start to monitor
+          the degree to which they depend on technology in order to avoid such
+          effects.
+        </p>
+        <br />
+        <p>
+          Still can’t see the impact of IT systems on the accessibility of
+          information in our daily lives? My challenge to you today is to spend
+          a whole day without using a search engine of any kind – it will reveal
+          to you the intensity of our dependence on the internet. Maybe we
+          should our quests for finding connections and look up from our devices
+          make those connections ourselves.
+        </p>
+      </div>
+
+      <div id="essay-facial">
+        <h2>The Usefulness of Facial Recognition</h2>
+        <p>
+          We live in a world where everything is developing a technological
+          alternative. I recently chanced upon some articles that commented on
+          the use of Artificial Intelligence in different areas of impact. They
+          commented on the Chinese response to the application of facial
+          recognition in helping make governmental decisions and the other made
+          mention of the development of Artificial Intelligence to help African
+          institutions in their provision of services. I am mainly interested in
+          the role facial recognition software plays in different areas of
+          impact. As a result, in this blog post, I will be evaluating the
+          extent to which the usefulness of facial recognition software is
+          dependent on the area of impact being considered.
+        </p>
+        <br />
+        <p>
+          To understand its usefulness we must first get an understanding of
+          what facial recognition software is. This IT system seeks to “use
+          biometrics to map facial features from a photograph or video and it
+          compares the information with a database of known faces to find a
+          match.” This branch of artificial intelligence has the appearance of
+          human-like intelligence and it’s success in identity verification has
+          allowed it to be used in a number of scenarios.
+        </p>
+        <br />
+        <p>
+          For instance, facial recognition software has been developed by a
+          young girl in Ghana, namely Charlette N’Guessan, to help African
+          institutions and industries that rely on the software in the provision
+          of services. Her development of the software named BACE API, did not
+          only make her win the 2020 Africa Prize for Engineering Innovation,
+          but also helped these institutions, like Ghanaian banks, confront the
+          pressing issue of cybercrime and identity theft. BACE API’s area of
+          impact is business and employment and I believe it will have a
+          positive and beneficial impact on the institutions that use it.
+          However, it is crucial to note that all that glitters is not gold.
+          Although in this situation, the use of facial recognition software
+          appears to be fruitful, in other situations facial recognition
+          software is being used “to track dangerous criminals and legitimate
+          political protesters.” In this situation after a series of protests
+          against the expedition of criminals to mainland China, the Chinese
+          government has leveraged the surveillance systems they had in place
+          and coupled with the facial recognition software to arrest protesters.
+        </p>
+        <br />
+        <p>
+          Evidently, the usefulness of facial recognition software varies
+          depending on the area of impact being considered. Nonetheless, to make
+          the argument more justifiable, we must consider the social and ethical
+          concerns that come along with the use of the software. I perceive the
+          development of the software, BACE API to aid in digital citizenship as
+          with such a system in place, more people would have a more ethical and
+          legal approach concerning the use of IT. On the contrary, the use of
+          facial recognition software in Hong Kong, brings forth a number of
+          social and ethical concerns such as privacy, surveillance, policies
+          and anonymity. Protesters are upset that their privacy is not being
+          respected. They believe that they have the right to determine for
+          themselves when, how and to what extent information about themselves
+          is being shared with others. Be that as it may, I find it very
+          surprising that they expect their voices to be heard when they have
+          turned around to do the exact same thing by leaking private
+          information to government authorities.
+        </p>
+        <br />
+        <p>
+          This further encourages the act of surveillance as the government will
+          want to not only monitor their actions again but use facial
+          recognition to identify them and arrest them. The protesters believe
+          that if the Hong Kong government says that there are privacy controls
+          in place to govern the use of the software, then the government should
+          ensure that the said controls are being implemented. The issue of
+          policies arises because if there were enforceable measures created to
+          monitor the inappropriate use relating to information technologies
+          such as surveillance cameras, the use of facial recognition software
+          and even using social media platforms, the situation would have been
+          less catastrophic. It all boils down to authenticity; facial
+          recognition software helps to establish a user’s identity beyond
+          reasonable doubt. The only way this would be a concern is if
+          individuals have done something bad and do not want to be held
+          accountable.
+        </p>
+        <br />
+        <p>
+          All things considered, I believe that to a large extent, the
+          usefulness of facial recognition software is dependent on the area of
+          impact being considered. It is also worthy to note that the
+          stakeholders involved also play a significant role in determining the
+          usefulness of such an IT system. It is clear that policies are crucial
+          in the use of facial recognition software because the stakeholders can
+          both be held accountable if anything is to occur. In spite of that, as
+          aforementioned, we live in a world where everything is developing a
+          technological alternative and some technologies might oppose one
+          another. What then would we do when making policies for those?
+        </p>
+      </div>
+
+      <div id="essay-expert">
+        <h2>A Kind-of Expert Analysis on Expert Systems</h2>
+        <p>
+          Expert systems are those type of systems; the ones that think they
+          know everything. Except they do…well to some extent. You see expert
+          systems are programs or software that use human knowledge to mimic the
+          expertise of an expert and solve a problem in a specific knowledge
+          domain using specific rules.
+        </p>
+        <br />
+        <p>
+          They have over the years proven to be useful in many areas, such as
+          education and training, medical diagnosis, financial decision-making
+          and estate and insurance planning. One field that I find the use of
+          expert systems particularly striking is in the financial field. In
+          this blog post, I am going to evaluate the use of expert systems using
+          the INVEX(Investment expert system) as a case study.
+        </p>
+        <br />
+        <p>
+          INVEX is a program that helps project analysts decide what projects to
+          invest in. It works like any other expert system with a set of
+          inference rules, a knowledge base and a user interface. It has an
+          interactive user screen that is used to communicate with the user and
+          the software asks the user or customer questions about their
+          intentions and preferences. This information is used to build up a
+          customer profile which would be used in the decision making process.
+          The software uses Microsoft Excel for data entry, financial works as
+          well as translations. Based on the information in the customer
+          profile, the software will divide the investments into five groups
+          namely: very bad, bad, medium, good and very good. It does this using
+          values of dynamic parameters as seen below:
+        </p>
+        <img
+          src="https://github.com/fremariab/portfolio/releases/download/v1.0.0/image_invex.png"
+          alt="INVEX’s values of dynamic parameters"
+          style="height: 100px; width: 30px"
+        />
+        <br />
+        <p>
+          Investments from the group very good are accepted, while investments
+          from the group very bad are rejected, before it takes part in
+          multi-criteria decision-making. For the investments from the groups
+          good, medium and bad, a group-specific sensitivity analysis is
+          performed and then a user is asked whether to accept or reject each of
+          these investments. The first step decreases the number of investments
+          that will take part in multi-criteria decision-making, by rejecting
+          the bad choices. Total pre-order used in multi-criteria
+          decision-making gives the best investments from the set of accepted
+          investments.
+        </p>
+        <br />
+        <p>
+          This financial expert system is useful to both project analysts and
+          investors. Project analysts use INVEX to provide guidance to
+          businesses on making investment decisions as it is less error-prone
+          and time consuming. Investors also use INVEX to help them in deciding
+          what investments will give them a greater return.
+        </p>
+        <br />
+        <p>
+          As much as the INVEX expert system is useful and helps in investment
+          management, the use of this software brings about some social or
+          ethical concerns. A few of these social or ethical concerns that
+          emerge from the use of INVEX are reliability and security.
+        </p>
+        <br />
+        <p>
+          In some instances, the software is not protected from unauthorized
+          access, paving a way for hackers to get access to the information.
+          This is risky as when hackers get access to customer profiles they can
+          use the information for other purposes which impacts the confidence in
+          the system.
+        </p>
+        <br />
+        <p>
+          Moreover, at times the data does not completely correspond with the
+          real world. In the financial field, there are often a lot of
+          uncertainties. For example, using INVEX helps the managers assess
+          future alternatives and the risk levels and return association between
+          them. At times uncertain future investments are presented in terms of
+          present consumption and resources and some uncertain factors include
+          price and demand projections. As a result, reliability issues arise as
+          prices may change and this may make the data outdated. It may even
+          make the data less accurate since the parameters used to make
+          decisions may be outdated.
+        </p>
+        <br />
+        <p>
+          These issues will impact the aforementioned stakeholders to a large
+          extent. For project analysts, if the data is unreliable, the decisions
+          that will be made to determine the viability of a project will not be
+          good and will affect the business as they will make bad investments.
+          This will cause the business to lose a lot of money and make even cost
+          the project analyst his job. For the investors, if they invest in the
+          investments that the software deems as good but are very bad in
+          reality, they will make huge losses. Unreliability will impact the
+          investor as well as decrease the value of the investment.
+        </p>
+        <br />
+        <p>
+          To combat these social or ethical concerns, a few solutions can be put
+          forward. The knowledge engineer of the expert system can regularly
+          review the data or parameters to update them. When they do this the
+          data is kept up to date and is more reliable since it has a higher
+          correspondence to the real world. Additionally, another way to combat
+          the problem, is to introduce ranges for the parameters, prices and
+          demand projections. Ranges that include future projections in
+          uncertain factors such as price, can make it more reliable. This would
+          reduce the likelihood of bad investments being deemed as acceptable.
+        </p>
+        <br />
+        <p>
+          In conclusion, by looking at INVEX, we can see that expert system are
+          very useful but only to an extent due to the social and ethical
+          concerns associated with it.
+        </p>
+      </div>
+
+      <div id="essay-change">
+        <h2>The Big Fat ‘F’ in Change Management</h2>
+        <p>
+          How would you feel if you invested millions of dollars into a new
+          system only for it to end up faulty? Personally, I wouldn’t be moved
+          because, really, what is a million dollars? That’s pocket change…which
+          must appear in my pocket right now! Well, more often than not, many
+          institutions that undergo change management of IT systems end up in
+          project failure, losing millions of dollars in the process. Let me
+          explain better.
+        </p>
+
+        <br />
+        <p>
+          In 2013, the Canadian Ministry of Children and Family Development
+          spent $182 million (WHEW!) on a new and improved Integrated Case
+          Management System to help protect sensitive data, improve service
+          delivery and replace 64 different databases. This new system was meant
+          to ensure that no vulnerable children were forgotten. Unfortunately,
+          after spending all this money, the new system encountered many
+          problems like constant breakdowns and some experienced difficulty
+          using the system. In this blog post, I am going to evaluate the
+          effects of change management of IT systems in an organisation, using
+          the aforementioned situation, as a case study.
+        </p>
+        <br />
+        <p>
+          With such a task of handling thousands (probably millions) of files,
+          the new system was supposed to work to the best standard and protect
+          all the information that it stored. However it didn’t even launch for
+          anyone to make comparisons of standard. It is noticeable that they
+          lacked time management. Out of the eight recommendations to be
+          evaluated, the group only evaluated six, leaving the other two and
+          dubbing the system as incomplete. They did not utilize the time given
+          to them from November 29th, 2010 till late 2014. They had 4 good years
+          to implement the system and ensure that it would be successful yet it
+          failed.
+        </p>
+        <br />
+        <p>
+          Moreover, project failure can be attributed to insufficient resources
+          for training and the ignorance of the goals for the system. The
+          Canadian Ministry of Children and Family Development had $182 million
+          for the whole project yet could not attribute a small portion of the
+          money to help train workers and get equipment for training. This
+          brings to light another underlying problem which is money management.
+          Allocation of money to the different aspects of the project,
+          especially training, would have helped the project to be more
+          successful as the workers would use it appropriately, reducing the
+          time spent and making them more efficient in their work.
+        </p>
+        <br />
+        <p>
+          The Canadian Ministry of Children and Family Development started by
+          purchasing modern software and partnering with Deloitte Incorporated
+          to help them develop and implement the system. They also used modern
+          technology and applied privacy principles. For the research roles
+          involved in implementing and managing the IT system, the government
+          searched for software to use as the backbone of the system and found
+          out there were two major software companies namely, Siebel and Curam.
+          After research (which I doubt was thorough), the government decided
+          that Siebel was the best option. However this software failed them. It
+          turns out other countries, that also had new systems to implement,
+          used Curam and experienced no challenges.
+        </p>
+
+        <br />
+        <p>
+          Considering how they could’ve used their research to alleviate or
+          reduce the impact of their problems, they could’ve employed more
+          people with expertise, done intense research on the software they used
+          as well as focused more on training of workers, and time and money
+          management. In my opinion, I believe that nothing was out of their
+          control. All of these contributed to the loss of data of vulnerable
+          people such as domestic abuse and orphaned children.
+        </p>
+        <br />
+        <p>
+          All things considered, I hope that I have clearly shown the effects of
+          change management of IT systems in organisations with respect to the
+          case study. It highlights how a lack of meticulousness and intention
+          can have adverse impacts. I urge you today to do everything with a
+          consideration of how it may leave a mark on others.
+        </p>
+      </div>
+
+      <div id="essay-aiTruth">
+        <h2>Artificial Intelligence : The Truth</h2>
+        <p>
+          As a child, I encountered many futuristic cartoons such as “My Life as
+          A Teenage Robot” and “Robotboy”, which you might be familiar with.
+          These shows presented technology as something visionary – something
+          the world needed. I grew up to see indeed that in most aspects of the
+          world, technology was being introduced. For example, about 4 years
+          ago, my dad brought a “Roomba”, an automatic vacuum robot cleaner,
+          into the house. Initially, I was excited that I would no longer have
+          to spend time sweeping around the house as the Roomba was designed to
+          do that, using machine learning. However, at a point in time, I found
+          myself asking if I still know how to sweep, if I’ll ever sweep again
+          and if Artificial Intelligence will replace humans. This incident
+          inspired me to do some research about Artificial Intelligence and the
+          myths that surround it. In this blog post, I will not only explore
+          some of the myths that are often associated with Artificial
+          Intelligence but also present the facts that address these myths.
+        </p>
+
+        <br />
+        <p>
+          Essentially, Artificial Intelligence involves a great deal of machine
+          learning, a technique that makes computers produce better results by
+          learning from past experiences (Stuart 330). This technique is related
+          to the concept of computational intelligence, a concept which
+          Artificial Intelligence has its basis. Most people have the
+          preconceived notion that technology or Artificial Intelligence
+          especially, is going to completely replace humans because it is ever
+          evolving and as such will outrule the need for humans in specific
+          fields. A great example is in manufacturing where Artificial
+          Intelligence is used to accurately predict when a machine needs
+          maintenance, also known as predictive maintenance (Kaja Polachowska).
+          One may see this to be a great use of technology as it reduces machine
+          downtime however others may see it as technology replacing control
+          engineers. This myth needs to be flatlined. Artificial Intelligence
+          can not replace humans and this is largely based on the fact that
+          humans and computers are not the same. You might be thinking “well
+          clearly they are different” but let’s look at this on a deeper level.
+          Computers have good memory and better mathematical abilities than
+          humans which explains why they are used in a number of fields but not
+          all fields. This is because in some fields, there is not enough data
+          for Artificial Intelligence to work in. Machine learning requires huge
+          amounts of data in order to work but in relatively new fields, there
+          is little data and thus, Artificial Intelligence can not replace
+          humans in that regard.
+        </p>
+        <br />
+        <p>
+          However, this brings into question the reliability of Artificial
+          Intelligence. The IB refers to reliability as the accuracy of data or
+          its correspondence with the real world (International Baccalaureate).
+          A significant aspect of Artificial Intelligence relies on the accuracy
+          of data as well as it’s correspondence with the real world. If the
+          data Artificial Intelligence uses in its machine learning is not
+          reliable this has serious implications in many fields. Looking back at
+          the example of predictive maintenance, Artificial Intelligence having
+          inaccurate data will mean that machine downtime will be increased and
+          businesses will be at a loss. To address such a problem, in developing
+          Artificial Intelligence, much attention must be paid to the algorithms
+          as well as the data. Humans can always involve themselves in data
+          mining to ensure that the data that corresponds with the real world is
+          always being used. This is another fact that counters the myth that
+          Artificial Intelligence completely replaces humans, as it shows that
+          Artificial Intelligence creates new jobs and opportunities for humans
+          in these fields.
+        </p>
+        <br />
+        <p>
+          Additionally, another myth many believe about Artificial Intelligence
+          is that it is objective and unbiased. Many are under the notion that
+          Artificial Intelligence lacks subjectivity and is unprejudiced but
+          this is not the case. As aforementioned, Artificial Intelligence
+          requires a lot of data on a particular topic and at times this data
+          may seem to be objective although it is not. For instance, in the
+          human resources field, Artificial Intelligence is used to make
+          decisions about which candidate is fit for a particular job. In such
+          an instance, data about the ideal candidate and how past human
+          resource managers made their decisions. However this data ends up
+          becoming subjective. This is because the data is not only based on
+          scientific evidence but also feelings and personal experiences. This
+          ultimately influences the decision made by the Artificial Intelligence
+          system and makes the decision bias. I am not so surprised to see that
+          such a myth is false because if Artificial Intelligence was made to
+          mimic the human brain how can an aspect such as bias be avoided?
+        </p>
+        <br />
+        <p>
+          Taking all things into consideration, it is clear that many
+          preconceived notions about Artificial Intelligence come from the
+          social and ethical concern of people and machines where people view
+          Artificial Intelligence to be revolutionary, just like I did as a
+          child, even to the extent of taking over the world. Artificial
+          Intelligence is one of the most significant technological advancements
+          I have ever seen. The sooner we debunk these myths, the better,
+          because we will start to realize the numerous advantages Artificial
+          Intelligence has in store for humans. I read a short story called
+          “There Will Come Soft Rains” where a smart house was left standing
+          after a war had taken all the humans off the face of the earth. It
+          only took a day for the house to fall apart without the humans.
+          Evidently, without humans technology would not exist and we need to
+          comprehend that at the end of the day, the power rests in our hands.
+        </p>
+      </div>
+
+      <div id="essay-models">
+        <h2>It’s Only As Real As It Gets…</h2>
+        <p>Try drawing this flower.</p>
+        <center>
+          <img
+            src="https://github.com/fremariab/portfolio/releases/download/v1.0.0/image_flower.png"
+            alt="A blue flower"
+            style="height: 300px; width: 300px"
+          />
+        </center>
+        <br />
+        <p>
+          Was your drawing a 100% accurate? Would you consider it a good
+          representation? These questions come up a lot during the design stage
+          of the product development life cycle. The design stage is an
+          important stage in the product development life cycle because it
+          allows us to be focused, and efficient during the development stage.
+          The design stage covers the relationships between the inputs, outputs,
+          data structures and processes of the system represented in the form of
+          models and design elements. Examples of these models and design
+          elements include data flow diagrams, entity relationship diagrams and
+          prototypes like wireframes and user interfaces.
+        </p>
+        <br />
+        <p>
+          In the post “The Importance of the Systems Development Life Cycle”, I
+          spoke about the Exeat System my ITGS classmates and I tried to
+          develop. As we designed our solution, I kept thinking about the
+          concerns associated with using these computer models to achieve an
+          accurate representation of the Exeat System. In this blog post, I will
+          be sharing some challenges designers face when creating a computer
+          model of some aspect of the world.
+        </p>
+        <br />
+        <p>
+          One challenge designers face when creating a computer model of some
+          aspect of the world is the complexity of the real world. There are an
+          infinite amount of possibilities in the world but it is hard to model
+          that using technology. One way to overcome this is to make assumptions
+          about the unknown possibilities. However, making assumptions can null
+          the reliability of the model since it is not 100% accurate.
+        </p>
+        <br />
+        <p>
+          Moreover, another challenge faced by designers creating a computer
+          model is the possibility that they may not have an understanding of
+          how the real life system works to create a model. A typical example is
+          the prediction of the occurrence of earthquakes. In reality, it is
+          difficult to predict these and as a result, it will be difficult for a
+          designer to create a model representing some aspect of the world.
+        </p>
+
+        <br />
+        <p>
+          Additionally, another challenge designers will face is the creation of
+          a computer model relying heavily on research and past events.
+          Designers will create a computer model that works effectively based on
+          past and current information. The model will not be able to work
+          effectively in the future as conditions may have changed. This reduces
+          the effectiveness of the model and it will also not be a good
+          representation of the real world.
+        </p>
+        <br />
+        <p>
+          All things considered, these are challenges that make the work of
+          designers difficult as they create computer models of some aspect of
+          the world. These challenges may be hard to overcome and may make the
+          computer model slightly inaccurate, however, they are also proof that
+          computer models can never accurately and perfectly represent the real
+          world. Just like your drawing and the flower, there is always going to
+          be that difference between the model and the real world. It’s only as
+          real as it gets…
+        </p>
+      </div>
+    </div>
+
+    <dialog id="demoDialog" aria-labelledby="demoTitle">
+      <form method="dialog" class="demo-shell">
+        <div class="demo-header">
+          <span id="demoTitle"></span>
+          <button id="demoClose" class="demo-close" aria-label="Close">
+            ×
+          </button>
+        </div>
+        <div id="demoContainer" class="demo-container"></div>
+      </form>
+    </dialog>
+
+    <dialog id="essayDialog" aria-labelledby="essayTitle">
+      <form method="dialog" class="demo-shell">
+        <div class="demo-header">
+          <span id="essayTitle"></span>
+          <button id="essayClose" class="demo-close" aria-label="Close">
+            ×
+          </button>
+        </div>
+        <div
+          id="essayContainer"
+          class="demo-container"
+          style="padding: 16px; overflow-y: auto"
+        ></div>
+      </form>
+    </dialog>
+    <script>
+      let currentView = "home";
+      let navigationHistory = ["home"];
+      let historyIndex = 0;
+
+      const views = {
+        home: document.getElementById("homeView"),
+        about: document.getElementById("aboutView"),
+        skills: document.getElementById("skillsView"),
+        projects: document.getElementById("projectsView"),
+        work: document.getElementById("workView"),
+        writing: document.getElementById("writingView"),
+        volunteer: document.getElementById("volunteerView"),
+        contact: document.getElementById("contactView"),
+      };
+
+      const addresses = {
+        home: "C:\\Freda-Marie Beecham\\Portfolio\\",
+        about: "C:\\Freda-Marie Beecham\\Portfolio\\About Me\\",
+        skills: "C:\\Freda-Marie Beecham\\Portfolio\\Skills\\",
+        projects: "C:\\Freda-Marie Beecham\\Portfolio\\Projects\\",
+        work: "C:\\Freda-Marie Beecham\\Portfolio\\Work Experience\\",
+        writing: "C:\\Freda-Marie Beecham\\Portfolio\\Miscellaneous\\",
+        volunteer: "C:\\Freda-Marie Beecham\\Portfolio\\Volunteering\\",
+        contact: "C:\\Freda-Marie Beecham\\Portfolio\\Contact\\",
+      };
+
+      const titles = {
+        home: "C:\\Freda-Marie Beecham\\Portfolio\\ File Explorer",
+        about: "About Me - Notepad",
+        skills: "Skills - Folder",
+        work: "Work Experience - Folder",
+
+        projects: "Projects - Folder",
+        writing: "Miscellaneous - Folder",
+        volunteer: "Volunteering - Folder",
+        contact: "Contact - Notepad",
+      };
+
+      function navigateTo(viewName) {
+        Object.values(views).forEach((view) => (view.style.display = "none"));
+
+        views[viewName].style.display = viewName === "home" ? "grid" : "block";
+
+        currentView = viewName;
+
+        if (historyIndex === navigationHistory.length - 1) {
+          navigationHistory.push(viewName);
+          historyIndex++;
+        } else {
+          navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+          navigationHistory.push(viewName);
+          historyIndex++;
+        }
+
+        updateUI();
+      }
+
+      function navigateBack() {
+        if (historyIndex > 0) {
+          historyIndex--;
+          const targetView = navigationHistory[historyIndex];
+
+          Object.values(views).forEach((view) => (view.style.display = "none"));
+          views[targetView].style.display =
+            targetView === "home" ? "grid" : "block";
+          currentView = targetView;
+          updateUI();
+        }
+      }
+      function navigateForward() {
+        if (historyIndex < navigationHistory.length - 1) {
+          historyIndex++;
+          const targetView = navigationHistory[historyIndex];
+
+          Object.values(views).forEach((view) => (view.style.display = "none"));
+          views[targetView].style.display =
+            targetView === "home" ? "grid" : "block";
+          currentView = targetView;
+          updateUI();
+        }
+      }
+
+      function updateUI() {
+        document.getElementById("addressBar").value = addresses[currentView];
+
+        document.getElementById("windowTitle").textContent =
+          titles[currentView];
+
+        document.getElementById("backBtn").disabled = historyIndex <= 0;
+        document.getElementById("forwardBtn").disabled =
+          historyIndex >= navigationHistory.length - 1;
+
+        const breadcrumb = document.getElementById("breadcrumb");
+        if (currentView === "home") {
+          breadcrumb.innerHTML =
+            "<a onclick=\"navigateTo('home')\">Portfolio</a>";
+        } else {
+          const viewNames = {
+            about: "About Me",
+            skills: "Skills",
+            projects: "Projects",
+            writing: "Miscellaneous",
+            volunteer: "Volunteering",
+            work: "Work Experience",
+            contact: "Contact",
+          };
+          breadcrumb.innerHTML = `<a onclick="navigateTo('home')">Portfolio</a> > ${viewNames[currentView]}`;
+        }
+
+        const itemCounts = {
+          home: "9 items",
+          about: "1 item",
+          skills: "6 items",
+          projects: "13 items",
+          work: "2 items",
+          writing: "8 items",
+          volunteer: "7 items",
+          contact: "3 items",
+        };
+        document.getElementById(
+          "statusText"
+        ).textContent = `Ready | ${itemCounts[currentView]}`;
+      }
+
+      function openFile(fileName) {
+        if (fileName === "resume") {
+          window.open("https://github.com/fremariab/portfolio/releases/download/v1.0.0/Freda-Marie.Beecham_Resume.pdf", "_blank", "noopener");
+        }
+      }
+
+      function playClickSound() {
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+          0.001,
+          audioContext.currentTime + 0.1
+        );
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      }
+
+      document.addEventListener("click", function (e) {
+        if (
+          e.target.matches(".folder-item, .file-item, .nav-btn, .breadcrumb a")
+        ) {
+          playClickSound();
+        }
+      });
+
+      updateUI();
+      function initKeyboardAccess() {
+        document.querySelectorAll(".folder-item, .file-item").forEach((el) => {
+          el.setAttribute("tabindex", "0");
+
+          el.removeEventListener("keydown", el._kbdHandler || (() => {}));
+
+          const handler = (e) => {
+            const key = e.key || e.code;
+            if (key === "Enter" || key === " " || key === "Spacebar") {
+              e.preventDefault();
+              const click = el.getAttribute("onclick");
+              if (click) {
+                new Function(click)();
+              }
+            }
+          };
+          el.addEventListener("keydown", handler);
+          el._kbdHandler = handler;
+        });
+      }
+
+      initKeyboardAccess();
+      (function () {
+        const dialog = document.getElementById("demoDialog");
+        const container = document.getElementById("demoContainer");
+        const titleEl = document.getElementById("demoTitle");
+        const closeBtn = document.getElementById("demoClose");
+
+        document.addEventListener("click", (e) => {
+          const btn = e.target.closest(".demo-btn");
+          if (!btn) return;
+          const src = btn.getAttribute("data-video");
+          const title = btn.getAttribute("data-title") || "Project Demo";
+          if (!src) return;
+
+          titleEl.textContent = title;
+
+          let node;
+          if (/\.(mp4|webm|ogg)(\?|#|$)/i.test(src)) {
+            node = document.createElement("video");
+            node.src = src;
+            node.controls = true;
+            node.playsInline = true;
+            node.muted = true;
+            node.autoplay = true;
+          } else {
+            const url = new URL(src, window.location.href);
+            const isYouTube = /youtube\.com|youtu\.be/.test(url.href);
+            const isVimeo = /vimeo\.com/.test(url.href);
+
+            if (isYouTube) {
+              let videoId = url.searchParams.get("v");
+              if (!videoId && url.hostname === "youtu.be")
+                videoId = url.pathname.slice(1);
+              const embed = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+              node = document.createElement("iframe");
+              node.src = embed;
+              node.allow =
+                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+              node.allowFullscreen = true;
+            } else if (isVimeo) {
+              const pathId = url.pathname.replace("/", "");
+              const embed = `https://player.vimeo.com/video/${pathId}?autoplay=1`;
+              node = document.createElement("iframe");
+              node.src = embed;
+              node.allow = "autoplay; fullscreen; picture-in-picture";
+              node.allowFullscreen = true;
+            } else {
+              node = document.createElement("iframe");
+              node.src = url.href;
+            }
+          }
+
+          container.innerHTML = "";
+          container.appendChild(node);
+          if (typeof dialog.showModal === "function") {
+            dialog.showModal();
+          } else {
+            dialog.setAttribute("open", "");
+          }
+          closeBtn.focus();
+        });
+
+        function closeDemo() {
+          if (dialog.open) dialog.close();
+          container.innerHTML = "";
+        }
+
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          closeDemo();
+        });
+
+        dialog.addEventListener("cancel", (e) => {
+          e.preventDefault();
+          closeDemo();
+        });
+      })();
+
+      (function () {
+        const dialog = document.getElementById("essayDialog");
+        const container = document.getElementById("essayContainer");
+        const titleEl = document.getElementById("essayTitle");
+        const closeBtn = document.getElementById("essayClose");
+        const repo = document.getElementById("essayContentRepo");
+
+        document.addEventListener("click", (e) => {
+          const link = e.target.closest("[data-essay]");
+          if (!link) return;
+
+          const essayId = link.getAttribute("data-essay");
+          const essayTitle = link.getAttribute("data-title") || "Essay";
+          const source = repo.querySelector(`#essay-${essayId}`);
+
+          titleEl.textContent = essayTitle;
+          container.innerHTML = source
+            ? source.innerHTML
+            : "<p>Essay not found.</p>";
+
+          if (typeof dialog.showModal === "function") dialog.showModal();
+          else dialog.setAttribute("open", "");
+          closeBtn.focus();
+        });
+
+        function closeEssay() {
+          if (dialog.open) dialog.close();
+          container.innerHTML = "";
+        }
+
+        closeBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          closeEssay();
+        });
+
+        dialog.addEventListener("cancel", (e) => {
+          e.preventDefault();
+          closeEssay();
+        });
+      })();
+    </script>
+  </body>
+</html>
