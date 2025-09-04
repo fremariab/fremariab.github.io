@@ -1,0 +1,2 @@
+".gitattributes"   # optional if not already tracked
+"`n# large binaries`nassets/demos/`n*.mp4`n*.pdf" 
