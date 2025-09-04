@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Freda-Marie Beecham's Portfolio</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
 
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap");
@@ -252,16 +252,6 @@
         text-decoration: underline;
       }
 
-      .file-content {
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        padding: 20px;
-        margin: 20px 0;
-        white-space: pre-wrap;
-        color: var(--ink);
-        border-radius: 10px;
-      }
-
       .project-card {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -366,10 +356,6 @@
         background: var(--accent-100);
       }
 
-      #contactView[hidden] {
-        display: none;
-      }
-
       .contact-card {
         max-width: 560px;
         margin: 0 auto;
@@ -458,9 +444,6 @@
         .contact-item {
           padding: 8px 10px;
         }
-      }
-      .icon {
-        flex-shrink: 0;
       }
 
       #demoDialog {
@@ -737,7 +720,11 @@
           <div id="aboutView" style="display: none">
             <div class="about-container">
               <div class="about-photo">
-                <img src="profilepic.jpg?v=2" alt="Freda-Marie Beecham portrait" style="display:block" />
+                <img
+                  src="profilepic.jpg?v=2"
+                  alt="Freda-Marie Beecham portrait"
+                  style="display: block"
+                />
               </div>
 
               <div class="about-text">
@@ -876,7 +863,7 @@
             </div>
           </div>
 
-          <section id="contactView" hidden>
+          <section id="contactView">
             <div class="contact-card">
               <h2 class="contact-title">Let’s connect</h2>
               <p class="contact-intro">
@@ -991,7 +978,7 @@
                 <button
                   class="demo-btn"
                   type="button"
-  data-video="assets/demos/guardian-demo.mp4"
+                  data-video="assets/demos/guardian-demo.mp4"
                   data-title="Guardian — Demo"
                 >
                   View Demo
@@ -1155,8 +1142,7 @@
                 >
 
                 <a
-                  href="                https://fremariab.github.io/sankofa-girlsinscience/
-"
+                  href="https://fremariab.github.io/sankofa-girlsinscience/"
                   class="demo-btn"
                   target="_blank"
                   rel="noopener"
@@ -2475,7 +2461,7 @@
       };
 
       const titles = {
-        home: "C:\\Freda-Marie Beecham\\Portfolio\\ File Explorer",
+        home: "C:\\Freda-Marie Beecham\\Portfolio - File Explorer",
         about: "About Me - Notepad",
         skills: "Skills - Folder",
         work: "Work Experience - Folder",
@@ -2635,6 +2621,19 @@
         const titleEl = document.getElementById("demoTitle");
         const closeBtn = document.getElementById("demoClose");
 
+        function toDrivePreview(url) {
+          try {
+            const u = new URL(url, window.location.href);
+            const m = u.pathname.match(/\/file\/d\/([^/]+)\//);
+            if (m && m[1])
+              return `https://drive.google.com/file/d/${m[1]}/preview`;
+            const id = u.searchParams.get("id");
+            if (id) return `https://drive.google.com/file/d/${id}/preview`;
+            return url;
+          } catch {
+            return url;
+          }
+        }
         document.addEventListener("click", (e) => {
           const btn = e.target.closest(".demo-btn");
           if (!btn) return;
@@ -2653,40 +2652,36 @@
             node.muted = true;
             node.autoplay = true;
           } else {
-            const url = new URL(src, window.location.href);
+            const href = toDrivePreview(src);
+
+            const u = new URL(href, window.location.href);
             const isYouTube = /youtube\.com|youtu\.be/.test(url.href);
             const isVimeo = /vimeo\.com/.test(url.href);
 
+            node = document.createElement("iframe");
             if (isYouTube) {
-              let videoId = url.searchParams.get("v");
-              if (!videoId && url.hostname === "youtu.be")
-                videoId = url.pathname.slice(1);
-              const embed = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
-              node = document.createElement("iframe");
-              node.src = embed;
+              let videoId = u.searchParams.get("v");
+              if (!videoId && u.hostname === "youtu.be")
+                videoId = u.pathname.slice(1);
+              node.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
               node.allow =
                 "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-              node.allowFullscreen = true;
             } else if (isVimeo) {
-              const pathId = url.pathname.replace("/", "");
-              const embed = `https://player.vimeo.com/video/${pathId}?autoplay=1`;
-              node = document.createElement("iframe");
-              node.src = embed;
+              const id = u.pathname.replace("/", "");
+              node.src = `https://player.vimeo.com/video/${id}?autoplay=1`;
               node.allow = "autoplay; fullscreen; picture-in-picture";
-              node.allowFullscreen = true;
             } else {
-              node = document.createElement("iframe");
-              node.src = url.href;
+              node.src = u.href; // includes Drive /preview
+              node.allow = "autoplay; encrypted-media";
             }
+            node.allowFullscreen = true;
+            node.loading = "lazy";
           }
 
           container.innerHTML = "";
           container.appendChild(node);
-          if (typeof dialog.showModal === "function") {
-            dialog.showModal();
-          } else {
-            dialog.setAttribute("open", "");
-          }
+          if (typeof dialog.showModal === "function") dialog.showModal();
+          else dialog.setAttribute("open", "");
           closeBtn.focus();
         });
 
@@ -2699,10 +2694,18 @@
           e.preventDefault();
           closeDemo();
         });
-
         dialog.addEventListener("cancel", (e) => {
           e.preventDefault();
           closeDemo();
+        });
+        dialog.addEventListener("click", (e) => {
+          const rect = dialog.getBoundingClientRect();
+          const inside =
+            e.clientX >= rect.left &&
+            e.clientX <= rect.right &&
+            e.clientY >= rect.top &&
+            e.clientY <= rect.bottom;
+          if (!inside) closeDemo();
         });
       })();
 
@@ -2745,13 +2748,17 @@
           e.preventDefault();
           closeEssay();
         });
+
+        dialog.addEventListener("click", (e) => {
+          const rect = dialog.getBoundingClientRect();
+          const inside =
+            e.clientX >= rect.left &&
+            e.clientX <= rect.right &&
+            e.clientY >= rect.top &&
+            e.clientY <= rect.bottom;
+          if (!inside) closeEssay();
+        });
       })();
     </script>
   </body>
 </html>
-
-
-
-
-
-
