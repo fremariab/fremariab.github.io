@@ -166,11 +166,12 @@
       }
       .intro-hero {
         margin: 0 auto 22px;
-        padding: 6px 2px;
-        font-size: 13px;
+        /* padding: 6px 2px; */
+        font-size: 16px;
         line-height: 1.6;
         color: var(--ink);
         text-align: center;
+        font-weight: 500;
         max-width: 600px;
         grid-column: 1 / -1;
       }
@@ -252,15 +253,67 @@
         text-decoration: underline;
       }
 
+      #projectsView {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(220px, 1fr));
+        gap: 24px;
+        align-items: start;
+        padding: 8px 0;
+      }
+
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(220px, 1fr));
+        gap: 24px;
+        align-items: start;
+        padding: 8px 0;
+      }
+
+      .project-thumb {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+        display: block;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      @media (max-width: 1000px) {
+        #projectsView {
+          grid-template-columns: repeat(2, minmax(200px, 1fr));
+        }
+      }
+      @media (max-width: 640px) {
+        #projectsView {
+          grid-template-columns: 1fr;
+        }
+        .project-thumb {
+          height: 220px;
+        }
+      }
+
       .project-card {
         background: var(--surface);
         border: 1px solid var(--border);
         padding: 20px;
-        margin: 15px 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         border-radius: 12px;
         box-shadow: var(--shadow);
+        height: 550px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
 
+      .project-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .project-thumb {
+        transform: scale(1.03);
+      }
       .project-title {
         color: var(--ink);
         font-weight: 700;
@@ -271,6 +324,12 @@
         margin-bottom: 12px;
         line-height: 1.45;
         color: var(--ink);
+      }
+      .project-actions {
+        margin-top: auto;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
       }
       .project-tech {
         color: var(--ink-dim);
@@ -355,8 +414,9 @@
         outline-offset: 3px;
         background: var(--accent-100);
       }
-      #contactView[hidden] { display: none; }
-
+      #contactView[hidden] {
+        display: none;
+      }
 
       .contact-card {
         max-width: 560px;
@@ -708,6 +768,11 @@
               <div class="folder-name">Miscellaneous</div>
             </div>
 
+            <div class="folder-item" onclick="navigateTo('research')">
+              <div class="folder-icon"></div>
+              <div class="folder-name">Research</div>
+            </div>
+
             <div class="file-item" onclick="openFile('resume')">
               <div class="file-icon"></div>
               <div class="file-name">Resume.pdf</div>
@@ -768,6 +833,27 @@
                     Cambridge IGCSE
                   </li>
                 </ul>
+              </div>
+            </div>
+          </div>
+
+          <div id="researchView" style="display: none">
+            <div class="about-container">
+              <div class="about-text">
+            <center><h2>Research Experience</h2></center>
+                <p>
+                  Although I don’t yet have formal research experience, I am
+                  eager to explore the topics of data science, computer vision,
+                  machine learning, IoT, smart cities, smart and sustainable
+                  mobility, and in-cabin sensing systems. I have a genuine love
+                  for learning, and I look forward to building knowledge and
+                  skills in these areas.
+
+                  <br />
+                  <br />
+                  This folder will grow as I gain more experience, and I would
+                  love for you to be part of making that happen.
+                </p>
               </div>
             </div>
           </div>
@@ -866,6 +952,7 @@
           </div>
 
           <section id="contactView" hidden>
+            <center><h2>Contact Details</h2></center>
             <div class="contact-card">
               <h2 class="contact-title">Let’s connect</h2>
               <p class="contact-intro">
@@ -954,41 +1041,52 @@
             </div>
           </section>
 
-          <div id="projectsView" style="display: none">
-            <div class="project-card">
-              <div class="project-title">
-                Guardian — Ride-Hailing Safety App
-              </div>
+          <div id="projectsView" class="projects-grid" style="display: none">
+
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/guardian.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+              <div class="project-title">Guardian Ride-Hailing Safety App</div>
               <div class="project-description">
-                A safety companion for women using ride-hailing in Ghana. It
-                quietly watches for risk (unusual route changes, distressed
-                audio, or fearful facial expressions) and can alert trusted
-                contacts even with limited internet.
+                A safety companion for women that quietly watches for risk
+                (unusual route changes, distressed audio, or fearful facial
+                expressions) and can alert trusted contacts even with limited
+                internet.
               </div>
-              <div class="project-tech">
-                Technologies: Kotlin (Android), TensorFlow Lite, GPS/Geofencing,
-                Google Maps SDK
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/guardian"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="assets/demos/guardian-demo.mp4"
-                  data-title="Guardian — Demo"
-                >
-                  View Demo
-                </button>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Kotlin (Android), TensorFlow Lite,
+                  GPS/Geofencing, Google Maps SDK
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/guardian"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <button
+                    class="demo-btn"
+                    type="button"
+                    data-video="assets/demos/guardian-demo.mp4"
+                    data-title="Guardian — Demo"
+                  >
+                    View Demo
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/rating.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">
                 Ride Safety & Driver Review Platform
               </div>
@@ -997,29 +1095,32 @@
                 and see community feedback before they ride—promoting
                 accountability and safer trips.
               </div>
-              <div class="project-tech">
-                Technologies: PHP, MySQL, PhpMyAdmin, HTML/CSS/JS
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/sayf"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://fremariab.github.io/assets/demos/review-demo.mp4"
-                  data-title="Sayf — Demo"
-                >
-                  View Demo
-                </button>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: PHP, MySQL, PhpMyAdmin, HTML/CSS/JS
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/sayf"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <button
+                    class="demo-btn"
+                    type="button"
+                    data-video="https://fremariab.github.io/assets/demos/review-demo.mp4"
+                    data-title="Sayf — Demo"
+                  >
+                    View Demo
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img src="assets/jec.png" class="project-thumb" loading="lazy" />
               <div class="project-title">
                 Judicial & Electoral Council (JEC) Management System
               </div>
@@ -1028,29 +1129,37 @@
                 scheduling, and voting— to improve efficiency, transparency, and
                 participation.
               </div>
-              <div class="project-tech">
-                Technologies: React.js, Next.js, Firebase
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/ashesi-jec"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <a
-                  href="https://ashesi-jec.vercel.app/"
-                  class="demo-btn"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  View Demo
-                </a>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: React.js, Next.js, Firebase
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/ashesi-jec"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <a
+                    href="https://ashesi-jec.vercel.app/"
+                    class="demo-btn"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    View Demo
+                  </a>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/recmotion.jpeg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
                 Emotion Recognition in Ghanaian Dialects
               </div>
@@ -1059,25 +1168,29 @@
                 dialects, making speech-driven apps more inclusive and
                 responsive to Ghanaian users.
               </div>
-              <div class="project-tech">
-                Technologies: Python, TensorFlow, Librosa, Pandas
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a href="#" class="github-link" target="_blank" rel="noopener"
-                  >View on GitHub</a
-                >
-                <!-- <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://drive.google.com/file/d/1iFRgZltF4rKiSU1gblVcx7llISY3znSI/view?usp=sharing"
-                  data-title="Emotion Recognition — Demo"
-                >
-                  View Demo
-                </button> -->
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Python, TensorFlow, Librosa, Pandas
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a href="#" class="github-link" target="_blank" rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <a
+                    href="https://drive.google.com/file/d/1iFRgZltF4rKiSU1gblVcx7llISY3znSI/view?usp=sharing"
+                    class="demo-btn"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    View Demo
+                  </a>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img src="assets/iot.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">
                 IoT-Based Smart Environment Monitoring & Control
               </div>
@@ -1086,13 +1199,20 @@
                 real time and predicts temperature trends to support
                 energy-efficient automation.
               </div>
-              <div class="project-tech">
-                Technologies: ESP32, Arduino/C++, MQTT, (ML) Forecasting
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: ESP32, Arduino/C++, MQTT, (ML) Forecasting
+                </div>
               </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap"></div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/footprint.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
                 Footprint Forward — Carbon Footprint Tracker
               </div>
@@ -1101,26 +1221,31 @@
                 transport choices and suggests lower-carbon alternatives to
                 nudge sustainable habits.
               </div>
-              <div class="project-tech">Technologies: Java, Git</div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/T11-OOP"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <!-- <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://drive.google.com/file/d/19sAy2Q-4SE8AWGiTkyz59aNKHnlfriDN/view?usp=sharing"
-                  data-title="Footprint Forward — Demo"
-                >
-                  View Demo
-                </button> -->
+              <div class="project-actions">
+                <div class="project-tech">Technologies: Java, Git</div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/T11-OOP"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <a
+                    href="https://drive.google.com/file/d/19sAy2Q-4SE8AWGiTkyz59aNKHnlfriDN/view?usp=drive_link"
+                    class="demo-btn"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    View Demo
+                  </a>
+                </div>
               </div>
             </div>
-            <div class="project-card">
+
+            <div class="project-card" style="height: 500px">
+              <img src="assets/sgis.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">
                 Sankofa Girls in Science — Website
               </div>
@@ -1129,32 +1254,40 @@
                 profiles, event updates, and sign-ups. Designed so non-technical
                 coordinators can update content easily.
               </div>
-              <div class="project-tech">
-                Technologies: Next.js (React), Tailwind CSS, Vercel/Netlify
-                Forms, Google Analytics
-              </div>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: HTML, Javascript, CSS, Netlify Forms, Google
+                  Analytics
+                </div>
 
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/gis-website"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/sankofa-girlsinscience/"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
 
-                <a
-                  href="https://fremariab.github.io/sankofa-girlsinscience/"
-                  class="demo-btn"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  View Demo
-                </a>
+                  <a
+                    href="https://fremariab.github.io/sankofa-girlsinscience/"
+                    class="demo-btn"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    View Demo
+                  </a>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/trotro.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
                 Locomo — Trotro Prices & Route Finder
               </div>
@@ -1163,50 +1296,60 @@
                 routes, typical prices, and wayfinding hints across town to cut
                 guesswork and travel time.
               </div>
-              <div class="project-tech">
-                Technologies: Flutter (Dart), Google Maps, REST APIs
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/locomo_app"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Flutter (Dart), Google Maps, REST APIs
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/locomo_app"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img src="assets/cot.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">Coocue — Smartphone Baby Monitor</div>
+
               <div class="project-description">
                 Turns two spare phones into a budget baby monitor with live
                 audio/video and motion/sound alerts—no dedicated hardware
                 required.
               </div>
-              <div class="project-tech">
-                Technologies: Android (Kotlin), WebRTC/RTSP, Push Notifications
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/coocue"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://fremariab.github.io/assets/coocue-demo.mp4"
-                  data-title="Coocue — Demo"
-                >
-                  View Demo
-                </button>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Android (Kotlin), WebRTC/RTSP, Push
+                  Notifications
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/coocue"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <button
+                    class="demo-btn"
+                    type="button"
+                    data-video="https://fremariab.github.io/assets/coocue-demo.mp4"
+                    data-title="Coocue — Demo"
+                  >
+                    View Demo
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img src="assets/cpu.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">
                 Computer Organization & Architecture — Logisim Project
               </div>
@@ -1215,101 +1358,123 @@
                 concepts—combinational logic, memory, and basic datapath
                 control—wired into runnable circuits.
               </div>
-              <div class="project-tech">
-                Technologies: Logisim, Digital logic, CPU datapath
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/group10_finalproject"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Logisim, Digital logic, CPU datapath
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/group10_finalproject"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img src="assets/lost.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">Ashesi Lost & Found</div>
               <div class="project-description">
                 A campus platform to report, browse, and claim lost items with a
                 simple verification flow—reducing time to reunite owners with
                 their belongings.
               </div>
-              <div class="project-tech">
-                Technologies: React, Firebase (Auth/Firestore/Storage)
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/ashesilostandfound"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://fremariab.github.io/assets/lostfound-demo.mp4"
-                  data-title="Lost & Found — Demo"
-                >
-                  View Demo
-                </button>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: HTML, CSS, Javascript, PHP
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/ashesilostandfound"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <button
+                    class="demo-btn"
+                    type="button"
+                    data-video="https://fremariab.github.io/assets/lostfound-demo.mp4"
+                    data-title="Lost & Found — Demo"
+                  >
+                    View Demo
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/chore.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">Chore Management System</div>
               <div class="project-description">
                 A simple web tool to assign chores, set due dates, and track
                 status for homes or teams—so nothing slips through the cracks.
               </div>
-              <div class="project-tech">
-                Technologies: JavaScript, HTML, CSS (optional: Firebase for
-                sync)
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/chore-mgt"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: JavaScript, HTML, CSS
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/chore-mgt"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                </div>
               </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 500px">
+              <img
+                src="assets/churn.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">Customer Churn Prediction</div>
               <div class="project-description">
                 A machine-learning model that flags at-risk customers so teams
                 can intervene earlier with targeted retention offers.
               </div>
-              <div class="project-tech">
-                Technologies: Python, scikit-learn, Pandas, Matplotlib
-              </div>
-              <div style="display: flex; gap: 10px; flex-wrap: wrap">
-                <a
-                  href="https://github.com/fremariab/ChurningCustomersProject"
-                  class="github-link"
-                  target="_blank"
-                  rel="noopener"
-                  >View on GitHub</a
-                >
-                <button
-                  class="demo-btn"
-                  type="button"
-                  data-video="https://fremariab.github.io/assets/churn-demo.mp4"
-                  data-title="Churn Prediction — Demo"
-                >
-                  View Demo
-                </button>
+              <div class="project-actions">
+                <div class="project-tech">
+                  Technologies: Python, scikit-learn, Pandas, Matplotlib
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap">
+                  <a
+                    href="https://github.com/fremariab/ChurningCustomersProject"
+                    class="github-link"
+                    target="_blank"
+                    rel="noopener"
+                    >View on GitHub</a
+                  >
+                  <button
+                    class="demo-btn"
+                    type="button"
+                    data-video="https://fremariab.github.io/assets/churn-demo.mp4"
+                    data-title="Churn Prediction — Demo"
+                  >
+                    View Demo
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
-          <div id="writingView" style="display: none">
-            <div class="project-card">
+          <div id="writingView" class="projects-grid" style="display: none">
+            <div class="project-card" style="height: 450px">
+              <img src="assets/ai.jpg" class="project-thumb" loading="lazy" />
               <div class="project-title">
                 Artificial Intelligence : The Truth
               </div>
@@ -1317,17 +1482,20 @@
                 Unpacking the myths around AI...Will it really replace us, or is
                 the story more about how people and machines work together?
               </div>
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="aiTruth"
-                data-title="Artificial Intelligence : The Truth"
-              >
-                Read full text
-              </a>
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="aiTruth"
+                  data-title="Artificial Intelligence : The Truth"
+                >
+                  Read full text
+                </a>
+              </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img src="assets/chng.png" class="project-thumb" loading="lazy" />
               <div class="project-title">
                 The Big Fat ‘F’ in Change Management
               </div>
@@ -1337,16 +1505,23 @@
                 training, and doing things right.
               </div>
 
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="change"
-                data-title="Change Management"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="change"
+                  data-title="Change Management"
+                  >Read full text</a
+                >
+              </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/facial.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">
                 The Usefulness of Facial Recognition
               </div>
@@ -1354,32 +1529,45 @@
                 From unlocking phones to tracking protesters, facial
                 recognition’s impact depends on how and where it’s used.
               </div>
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="facial"
-                data-title="Facial Recognition"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="facial"
+                  data-title="Facial Recognition"
+                  >Read full text</a
+                >
+              </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/model.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">It’s Only As Real As It Gets…</div>
               <div class="project-description">
                 Why computer models can’t perfectly mirror reality: complexity,
                 assumptions, shifting conditions.
               </div>
-
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="models"
-                data-title="It’s Only As Real As It Gets…"
-              >
-                Read full text
-              </a>
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="models"
+                  data-title="It’s Only As Real As It Gets…"
+                >
+                  Read full text
+                </a>
+              </div>
             </div>
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/expert.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">
                 A Kind-of Expert Analysis on Expert Systems
               </div>
@@ -1388,16 +1576,23 @@
                 reliability/security break down.
               </div>
 
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="expert"
-                data-title="Expert Systems"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="expert"
+                  data-title="Expert Systems"
+                  >Read full text</a
+                >
+              </div>
             </div>
 
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/cycle.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">
                 The Importance of the Systems Development Life Cycle
               </div>
@@ -1405,51 +1600,73 @@
                 Behind every system is a process! The SDLC shows why planning
                 and people matter as much as the final product.
               </div>
-
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="sdlc"
-                data-title="The Importance of the Systems Development Life Cycle"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="sdlc"
+                  data-title="The Importance of the Systems Development Life Cycle"
+                  >Read full text</a
+                >
+              </div>
             </div>
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/multimedia.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">Multimedia Manipulation</div>
               <div class="project-description">
                 How digital media shapes what we think is important.
               </div>
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="multimedia"
-                data-title="Multimedia Manipulation"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="multimedia"
+                  data-title="Multimedia Manipulation"
+                  >Read full text</a
+                >
+              </div>
             </div>
-            <div class="project-card">
+            <div class="project-card" style="height: 450px">
+              <img
+                src="assets/connection.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
               <div class="project-title">Finding A Connection</div>
               <div class="project-description">
                 The internet makes knowledge easy to grab but are we becoming
                 too dependent to question what we read?
               </div>
 
-              <a
-                href="javascript:void(0)"
-                class="github-link"
-                data-essay="connection"
-                data-title="Finding A Connection"
-                >Read full text</a
-              >
+              <div class="project-actions">
+                <a
+                  href="javascript:void(0)"
+                  class="github-link"
+                  data-essay="connection"
+                  data-title="Finding A Connection"
+                  >Read full text</a
+                >
+              </div>
             </div>
           </div>
 
-          <!-- NEW VIEW: Volunteering -->
-          <div id="volunteerView" style="display: none">
+          <div id="volunteerView" class="projects-grid" style="display: none">
             <div class="project-card">
+              <img
+                src="assets/academic.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                Peer Academic Advisor — Academic Advising Department, Ashesi
-                University
+                Peer Academic Advisor
+                <br />
+                <i>Academic Advising Department, Ashesi University</i>
               </div>
               <div class="project-tech">May 2024 – Feb 2025 · 10 mos</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1461,9 +1678,12 @@
             </div>
 
             <div class="project-card">
+              <img src="assets/rep.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">
-                Head of the Course Representative System — Academic Committee,
-                Ashesi University
+                Head of the Course Representative System
+                <br />
+                <i>Academic Committee, Ashesi University</i>
               </div>
               <div class="project-tech">Jan 2024 – Dec 2024 · 1 yr</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1479,30 +1699,41 @@
             </div>
 
             <div class="project-card">
+              <img
+                src="assets/tutor.png"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                Programming Peer Tutor — Academic Peer Tutoring Program, Ashesi
-                University
+                Programming Peer Tutor
+                <br />
+                <i>Academic Peer Tutoring Program, Ashesi University</i>
               </div>
               <div class="project-tech">Jan 2023 – Dec 2024 · 1 yr 4 mos</div>
               <ul class="project-description" style="margin-left: 18px">
                 <li>
-                  Led 10 sessions on Data Structures and Algorithms, covering
-                  key concepts such as arrays, linked lists,and trees, which
-                  significantly improved students' understanding and application
-                  of these concepts
+                  Led 10 DSA sessions, covering key concepts significantly
+                  improving students' understanding and application skills
                 </li>
                 <li>
-                  Aided 30 students in mastering the concepts of inheritance,
-                  polymorphism and encapsulation in Java through targeted
-                  instruction and hands-on practice on a weekly basis
+                  Aided 30 students in mastering object-oriented programming in
+                  Java through targeted instruction and hands-on practice
                 </li>
               </ul>
             </div>
 
             <div class="project-card">
+              <img
+                src="assets/career.jpeg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                Career Peer Advisor — Career Services Department, Ashesi
-                University
+                Career Peer Advisor
+                <br />
+                <i>Career Services Department, Ashesi University</i>
               </div>
               <div class="project-tech">Aug 2023 – Dec 2024 · 1 yr 5 mos</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1517,9 +1748,16 @@
               </ul>
             </div>
             <div class="project-card">
+              <img
+                src="assets/bball.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                General Secretary — Ashesi Basketball Association, Ashesi
-                University
+                General Secretary
+                <br />
+                <i> Ashesi Basketball Association, Ashesi University</i>
               </div>
               <div class="project-tech">Apr 2023 – Apr 2024 · 1 yr 1 mo</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1535,9 +1773,12 @@
             </div>
 
             <div class="project-card">
+              <img src="assets/fde.jpg" class="project-thumb" loading="lazy" />
+
               <div class="project-title">
-                Foundations of Design & Entrepreneurship Coach — Ashesi
-                University
+                Foundations of Design & Entrepreneurship Coach
+                <br />
+                <i> Ashesi University</i>
               </div>
               <div class="project-tech">Feb 2023 – May 2023 · 4 mos</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1549,8 +1790,16 @@
             </div>
 
             <div class="project-card">
+              <img
+                src="assets/class3.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                Tutor — St. Nicholas Preparatory School
+                Tutor
+                <br />
+                <i> St. Nicholas Preparatory School</i>
               </div>
               <div class="project-tech">Sep 2019 – Dec 2019 · 4 mos</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -1561,10 +1810,18 @@
               </ul>
             </div>
           </div>
-          <div id="workView" style="display: none">
+          <div id="workView" class="projects-grid" style="display: none">
             <div class="project-card">
+              <img
+                src="assets/amali.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                AmaliTech Services GmbH — East Legon
+                AmaliTech Services GmbH
+                <br />
+                <i> East Legon</i>
               </div>
               <div class="project-tech">
                 Software Developer Intern · Jun 2023 – Aug 2023
@@ -1572,8 +1829,8 @@
               <ul class="project-description" style="margin-left: 18px">
                 <li>
                   Implemented PA Authentication functions for a hospital booking
-                  management system as part of a Scrum team using Python and
-                  Django REST Framework (6-week delivery).
+                  management system in a Scrum team using Python and Django REST
+                  Framework.
                 </li>
                 <li>
                   Co-designed and developed an Access Key Manager API with
@@ -1584,8 +1841,39 @@
             </div>
 
             <div class="project-card">
+              <img
+                src="assets/ondio.jpeg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
+              <div class="project-title">Ondio Services</div>
+              <div class="project-tech">
+                Video Editor · October 2022 – May 2023
+              </div>
+              <ul class="project-description" style="margin-left: 18px">
+                <li>
+                  Edited 6 videos, for the Stories from the Motherland series to
+                  engage 77,000 subscribers
+                </li>
+                <li>
+                  Coordinated training sessions, teaching color correction,
+                  audio mixing and motion graphics development in Adobe Premiere
+                  Pro
+                </li>
+              </ul>
+            </div>
+            <div class="project-card">
+              <img
+                src="assets/telecom.jpg"
+                class="project-thumb"
+                loading="lazy"
+              />
+
               <div class="project-title">
-                Seatec Telecom Services Limited — Tema
+                Seatec Telecom Services Limited
+                <br />
+                <i>Tema</i>
               </div>
               <div class="project-tech">Solutions Design Intern · Aug 2022</div>
               <ul class="project-description" style="margin-left: 18px">
@@ -2449,6 +2737,7 @@
         writing: document.getElementById("writingView"),
         volunteer: document.getElementById("volunteerView"),
         contact: document.getElementById("contactView"),
+        research: document.getElementById("researchView"),
       };
 
       const addresses = {
@@ -2459,6 +2748,8 @@
         work: "C:\\Freda-Marie Beecham\\Portfolio\\Work Experience\\",
         writing: "C:\\Freda-Marie Beecham\\Portfolio\\Miscellaneous\\",
         volunteer: "C:\\Freda-Marie Beecham\\Portfolio\\Volunteering\\",
+        research: "C:\\Freda-Marie Beecham\\Portfolio\\Research\\",
+
         contact: "C:\\Freda-Marie Beecham\\Portfolio\\Contact\\",
       };
 
@@ -2472,12 +2763,17 @@
         writing: "Miscellaneous - Folder",
         volunteer: "Volunteering - Folder",
         contact: "Contact - Notepad",
+        research: "Research - Folder",
       };
 
       function navigateTo(viewName) {
         Object.values(views).forEach((view) => (view.style.display = "none"));
 
-        views[viewName].style.display = viewName === "home" ? "grid" : "block";
+        const gridViews = ["home", "projects", "work", "volunteer", "writing"];
+
+        views[viewName].style.display = gridViews.includes(viewName)
+          ? "grid"
+          : "block";
 
         currentView = viewName;
 
@@ -2541,6 +2837,7 @@
             volunteer: "Volunteering",
             work: "Work Experience",
             contact: "Contact",
+            research: "Research",
           };
           breadcrumb.innerHTML = `<a onclick="navigateTo('home')">Portfolio</a> > ${viewNames[currentView]}`;
         }
@@ -2554,6 +2851,7 @@
           writing: "8 items",
           volunteer: "7 items",
           contact: "3 items",
+          research: "0 items",
         };
         document.getElementById(
           "statusText"
